@@ -1167,7 +1167,11 @@ button {
 
 .comment-list .comment-body {
     padding: 1.1rem 0;
-    border-bottom: 1px solid var(--border);
+}
+
+/* 顶层评论之间用留白分隔，不用线条 */
+.comment-list > .comment-body + .comment-body {
+    margin-top: 0.5rem;
 }
 
 .comment-list .comment-author {
