@@ -419,10 +419,9 @@ button {
     opacity: 1;
 }
 
+/* 列表项之间用留白分隔，不加分割线 */
 .post-card + .post-card {
-    border-top: 1px solid var(--border);
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+    margin-top: 0.75rem;
 }
 
 .post-card:hover {
@@ -2224,12 +2223,16 @@ body.lightbox-open {
 
 /* ---------- 首页紧凑列表布局 ---------- */
 .post-list-compact {
-    gap: 0;
-    border-top: 1px solid var(--border);
+    gap: 0.25rem;
 }
 
 .post-row {
-    border-bottom: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: background-color 0.15s var(--ease);
+}
+
+.post-row:hover {
+    background: var(--bg-soft);
 }
 
 .post-row-link {
