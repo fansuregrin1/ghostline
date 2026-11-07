@@ -5,7 +5,7 @@
 一个为 [Typecho](https://typecho.org) 写的博客主题：现代、简洁、克制，带一点点冷色调的科幻气质。
 名字来自《攻壳机动队》的 *Ghost in the Shell*。
 
-![Ghostline](https://raw.githubusercontent.com/fansuregrin1/ghostline/main/usr/themes/ghostline/screenshot.png)
+![Ghostline](usr/themes/ghostline/screenshot.png)
 
 ## 特性
 
