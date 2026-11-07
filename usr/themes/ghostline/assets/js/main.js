@@ -105,6 +105,44 @@
         }
     }
 
+    /* ---------- 移动端顶栏搜索 ---------- */
+    var searchToggle = document.querySelector('[data-search-toggle]');
+    var searchPanel = document.querySelector('[data-search-panel]');
+    var searchInput = document.querySelector('#mobile-search-input');
+
+    if (searchToggle && searchPanel) {
+        searchToggle.addEventListener('click', function () {
+            var willOpen = searchPanel.hidden;
+            searchPanel.hidden = !willOpen;
+            searchToggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+
+            if (willOpen && searchInput) {
+                searchInput.focus();
+            }
+        });
+
+        // 提交后不需要保留展开状态
+        searchPanel.addEventListener('submit', function () {
+            searchPanel.hidden = true;
+            searchToggle.setAttribute('aria-expanded', 'false');
+        });
+    }
+
+    /* ---------- 侧栏折叠：桌面端全部展开 ---------- */
+    var sidebar = document.querySelector('.sidebar');
+    var desktopQuery = window.matchMedia('(min-width: 901px)');
+
+    if (sidebar) {
+        var syncSidebar = function () {
+            sidebar.querySelectorAll('.widget').forEach(function (widget) {
+                widget.open = desktopQuery.matches;
+            });
+        };
+
+        syncSidebar();
+        desktopQuery.addEventListener('change', syncSidebar);
+    }
+
     /* ---------- 返回顶部 ---------- */
     var backTop = document.querySelector('[data-back-top]');
 

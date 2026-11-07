@@ -60,6 +60,14 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
                    href="<?php $pages->permalink(); ?>"><?php $pages->title(); ?></a>
             <?php endwhile; ?>
 
+            <button class="icon-button nav-search-toggle" type="button" aria-label="<?php _e('搜索'); ?>"
+                    aria-expanded="false" aria-controls="mobile-search" data-search-toggle>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <path d="M20 20l-3.5-3.5"></path>
+                </svg>
+            </button>
+
             <button class="icon-button theme-toggle" type="button" aria-label="<?php _e('切换配色'); ?>"
                     data-theme-toggle>
                 <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
@@ -71,6 +79,15 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
                 </svg>
             </button>
         </nav>
+    </div>
+
+    <div class="shell mobile-search" id="mobile-search" data-search-panel hidden>
+        <form class="mobile-search-form" method="post" action="<?php $this->options->siteUrl(); ?>" role="search">
+            <label class="sr-only" for="mobile-search-input"><?php _e('搜索关键字'); ?></label>
+            <input id="mobile-search-input" type="search" name="s"
+                   placeholder="<?php _e('搜索文章…'); ?>" required>
+            <button type="submit"><?php _e('搜索'); ?></button>
+        </form>
     </div>
 </header>
 

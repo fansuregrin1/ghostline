@@ -474,6 +474,20 @@ button {
     font-size: 0.9rem;
 }
 
+.widget {
+    margin: 0;
+}
+
+.sidebar .widget > .widget-title {
+    list-style: none;
+    cursor: default;
+    pointer-events: none;
+}
+
+.sidebar .widget > .widget-title::-webkit-details-marker {
+    display: none;
+}
+
 .widget-title {
     margin: 0 0 0.75rem;
     font-size: 0.75rem;
@@ -1205,6 +1219,51 @@ button {
     stroke-linejoin: round;
 }
 
+/* ---------- 顶栏移动搜索（桌面隐藏） ---------- */
+.nav-search-toggle {
+    display: none;
+}
+
+.mobile-search {
+    padding-block: 0.6rem 0.9rem;
+}
+
+.mobile-search[hidden] {
+    display: none;
+}
+
+.mobile-search-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.mobile-search-form input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.55rem 0.8rem;
+    font: inherit;
+    font-size: 0.9375rem;
+    color: var(--text);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+}
+
+.mobile-search-form input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.mobile-search-form button {
+    flex-shrink: 0;
+    padding-inline: 1rem;
+    color: #fff;
+    background: var(--accent);
+    border: 0;
+    border-radius: var(--radius-sm);
+}
+
 /* ---------- 响应式 ---------- */
 @media (max-width: 900px) {
     .layout.has-sidebar {
@@ -1213,12 +1272,57 @@ button {
 
     .sidebar {
         position: static;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-        gap: 1.5rem 2rem;
+        display: block;
         margin-top: 2.5rem;
-        padding-top: 2rem;
+        padding-top: 0.5rem;
         border-top: 1px solid var(--border);
+    }
+
+    /* 移动端：侧栏折叠成手风琴面板 */
+    .sidebar .widget {
+        border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar .widget > .widget-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0;
+        padding: 0.95rem 0.15rem;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        letter-spacing: 0;
+        text-transform: none;
+        color: var(--text);
+        cursor: pointer;
+        pointer-events: auto;
+    }
+
+    .sidebar .widget > .widget-title::after {
+        content: "";
+        width: 0.5rem;
+        height: 0.5rem;
+        margin-right: 0.25rem;
+        border-right: 1.5px solid var(--text-faint);
+        border-bottom: 1.5px solid var(--text-faint);
+        transform: rotate(45deg);
+        transition: transform 0.2s var(--ease);
+    }
+
+    .sidebar .widget[open] > .widget-title::after {
+        transform: rotate(-135deg);
+    }
+
+    .sidebar .widget > .widget-title::-webkit-details-marker {
+        display: none;
+    }
+
+    .sidebar .widget > *:not(summary) {
+        padding-bottom: 1rem;
+    }
+
+    .nav-search-toggle {
+        display: inline-flex;
     }
 }
 
@@ -1276,10 +1380,6 @@ button {
     .footer-inner {
         flex-direction: column;
         align-items: flex-start;
-    }
-
-    .sidebar {
-        grid-template-columns: 1fr;
     }
 }
 
