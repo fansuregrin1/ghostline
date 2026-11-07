@@ -241,12 +241,11 @@ function themeConfig($form)
                 'showBackTop'    => _t('显示返回顶部按钮'),
                 'showPrevNext'   => _t('显示上一篇 / 下一篇'),
                 'showComments'   => _t('开放评论区'),
-                'showCover'      => _t('在列表页显示文章封面图'),
                 'showProgress'   => _t('显示阅读进度条'),
             ],
             [
                 'showSidebar', 'showToc', 'showReading', 'showBackTop',
-                'showPrevNext', 'showComments', 'showCover', 'showProgress',
+                'showPrevNext', 'showComments', 'showProgress',
             ],
             _t('功能开关')
         )->multiMode()
@@ -285,10 +284,6 @@ function themeFields($layout)
  */
 function ghostline_cover(\Widget\Archive $archive): string
 {
-    if (!ghostline_enabled('showCover')) {
-        return '';
-    }
-
     $cover = '';
 
     try {
@@ -363,7 +358,6 @@ function themeInit($options = null)
             'showBackTop',
             'showPrevNext',
             'showComments',
-            'showCover',
             'showProgress',
         ],
     ];
