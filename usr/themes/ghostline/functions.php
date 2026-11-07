@@ -68,9 +68,33 @@ function ghostline_config_group($form, string $title, string $desc = '')
  */
 function themeConfig($form)
 {
-    /* ---------------- 外观 ---------------- */
+    /* ================= 站点标识 ================= */
 
-    ghostline_config_group($form, _t('外观'), _t('品牌色与整体外观'));
+    ghostline_config_group($form, _t('站点标识'), _t('网站的名称、图标与主色调'));
+
+    $form->addInput(
+        (new \Typecho\Widget\Helper\Form\Element\Text(
+            'brandTitle',
+            null,
+            null,
+            _t('站点名称'),
+            _t('显示在页面左上角，留空则使用站点标题')
+        ))->addRule('maxLength', _t('名称过长'), 40)
+    );
+
+    $form->addInput(
+        (new \Typecho\Widget\Helper\Form\Element\Text(
+            'brandLogo',
+            null,
+            null,
+            _t('站点 Logo'),
+            _t('填入图片地址或站内路径（如 /usr/uploads/logo.png），替换左上角的默认色块。建议高度 32px 左右的 PNG 或 SVG，留空则显示默认色块')
+        ))->addRule(
+            'regexp',
+            _t('请填写合法的图片地址，例如 https://… 或 /usr/uploads/…'),
+            '#^(https?:)?//[^\s]+$|^/[^\s]*$#i'
+        )
+    );
 
     $form->addInput(
         (new \Typecho\Widget\Helper\Form\Element\Text(
@@ -82,55 +106,31 @@ function themeConfig($form)
         ))->addRule('regexp', _t('请填写合法的颜色值，例如 #2f6feb'), '/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/')
     );
 
-    $form->addInput(
-        (new \Typecho\Widget\Helper\Form\Element\Text(
-            'brandTitle',
-            null,
-            null,
-            _t('顶栏站点标题'),
-            _t('显示在页面左上角，留空则使用站点标题')
-        ))->addRule('maxLength', _t('标题过长'), 40)
-    );
+    /* ================= 首页 ================= */
 
-    $form->addInput(
-        (new \Typecho\Widget\Helper\Form\Element\Text(
-            'brandLogo',
-            null,
-            null,
-            _t('顶栏站点 Logo'),
-            _t('填入图片 URL 或站内路径（如 /usr/uploads/logo.png），会替换左侧默认色块。建议高度 32px 左右的 PNG 或 SVG，留空则显示默认色块')
-        ))->addRule(
-            'regexp',
-            _t('请填写合法的图片地址，例如 https://… 或 /usr/uploads/…'),
-            '#^(https?:)?//[^\s]+$|^/[^\s]*$#i'
-        )
-    );
-
-    /* ---------------- 首页设置 ---------------- */
-
-    ghostline_config_group($form, _t('首页设置'), _t('首页顶部标题、副标题与文章列表样式'));
+    ghostline_config_group($form, _t('首页'), _t('首页顶部文案与文章列表的呈现方式'));
 
     $form->addInput(
         (new \Typecho\Widget\Helper\Form\Element\Text(
             'homeTitle',
             null,
             null,
-            _t('首页标题'),
-            _t('显示在首页顶部的大标题，留空则显示 Ghostline')
+            _t('首页大标题'),
+            _t('留空则显示 Ghostline')
         ))->addRule('maxLength', _t('标题过长'), 60)
     );
 
     $form->addInput(
-        (new \Typecho\Widget\Helper\Form\Element\Radio(
+        new \Typecho\Widget\Helper\Form\Element\Radio(
             'hideHomeTitle',
             [
                 '0' => _t('显示'),
                 '1' => _t('隐藏'),
             ],
             '0',
-            _t('首页大标题显示'),
-            _t('隐藏后首页直接显示副标题与文章列表，避免与顶栏站名重复')
-        ))
+            _t('是否显示首页大标题'),
+            _t('隐藏后首页直接显示副标题与文章列表，避免与左上角站名重复')
+        )
     );
 
     $form->addInput(
@@ -139,7 +139,7 @@ function themeConfig($form)
             null,
             null,
             _t('首页副标题'),
-            _t('显示在标题下方的一句话，留空则显示默认文案')
+            _t('留空则显示默认文案 A quiet line between ghost and shell.')
         ))->addRule('maxLength', _t('副标题过长'), 200)
     );
 
@@ -151,7 +151,7 @@ function themeConfig($form)
                 '1' => _t('隐藏'),
             ],
             '0',
-            _t('首页副标题显示'),
+            _t('是否显示首页副标题'),
             _t('隐藏后首页只显示标题与文章列表')
         )
     );
@@ -165,7 +165,7 @@ function themeConfig($form)
                 'compact' => _t('紧凑式'),
             ],
             'card',
-            _t('首页文章列表样式'),
+            _t('文章列表样式'),
             _t('卡片式：带封面图，左图右文；经典式：纯文字，含标题与摘要；紧凑式：仅标题与日期')
         )
     );
@@ -180,19 +180,9 @@ function themeConfig($form)
         ))->addRule('isInteger', _t('请填写数字'))
     );
 
-    $form->addInput(
-        (new \Typecho\Widget\Helper\Form\Element\Number(
-            'recentPostCount',
-            null,
-            5,
-            _t('侧栏最新文章数量'),
-            _t('侧栏「最新文章」显示几条，建议 3 - 10')
-        ))->addRule('isInteger', _t('请填写数字'))
-    );
+    /* ================= 阅读体验 ================= */
 
-    /* ---------------- 排版 ---------------- */
-
-    ghostline_config_group($form, _t('正文排版'), _t('影响文章正文的字体、字号与行高'));
+    ghostline_config_group($form, _t('阅读体验'), _t('文章正文的排版与代码块显示'));
 
     $form->addInput(
         new \Typecho\Widget\Helper\Form\Element\Select(
@@ -235,10 +225,6 @@ function themeConfig($form)
         )
     );
 
-    /* ---------------- 代码块 ---------------- */
-
-    ghostline_config_group($form, _t('代码块'), _t('代码高亮配色与长代码行的处理方式'));
-
     $form->addInput(
         new \Typecho\Widget\Helper\Form\Element\Select(
             'codeTheme',
@@ -266,9 +252,9 @@ function themeConfig($form)
         )
     );
 
-    /* ---------------- 个人资料 ---------------- */
+    /* ================= 侧栏 ================= */
 
-    ghostline_config_group($form, _t('个人资料'), _t('显示在侧栏顶部的博主卡片，全部留空则不显示'));
+    ghostline_config_group($form, _t('侧栏'), _t('侧边栏显示的博主信息与模块内容'));
 
     $form->addInput(
         (new \Typecho\Widget\Helper\Form\Element\Text(
@@ -276,7 +262,7 @@ function themeConfig($form)
             null,
             null,
             _t('博主昵称'),
-            _t('显示在文章页作者处，留空则使用文章发布者')
+            _t('留空则不显示博主卡片')
         ))->addRule('maxLength', _t('昵称过长'), 40)
     );
 
@@ -285,8 +271,8 @@ function themeConfig($form)
             'authorBio',
             null,
             null,
-            _t('博主的个人简介'),
-            _t('显示在侧栏顶部，留空则不显示')
+            _t('博主简介'),
+            _t('一句话介绍，显示在昵称下方')
         ))->addRule('maxLength', _t('简介过长'), 200)
     );
 
@@ -295,9 +281,9 @@ function themeConfig($form)
             'authorAvatarUrl',
             null,
             null,
-            _t('博主头像地址'),
-            _t('填入图片 URL，留空则不显示')
-        ))->addRule('url', _t('请填写合法的 URL 地址'))
+            _t('博主头像'),
+            _t('填入图片地址，留空则不显示头像')
+        ))->addRule('regexp', _t('请填写合法的图片地址'), '#^(https?:)?//[^\s]+$|^/[^\s]*$#i')
     );
 
     $socialField = new \Typecho\Widget\Helper\Form\Element\Textarea(
@@ -310,34 +296,25 @@ function themeConfig($form)
 
     $form->addInput($socialField);
 
-    // 属性要设在内部的 textarea 元素上，而不是外层容器
     if ($socialField->input instanceof \Typecho\Widget\Helper\Layout) {
         $socialField->input->setAttribute('rows', 4);
         $socialField->input->setAttribute('class', 'text w-100');
         $socialField->input->setAttribute('style', 'resize:vertical;min-height:96px;');
     }
 
-    /* ---------------- 页脚 ---------------- */
-
-    ghostline_config_group($form, _t('页脚信息'), _t('版权、备案号与自定义文字'));
-
-    $footerField = new \Typecho\Widget\Helper\Form\Element\Textarea(
-        'footerText',
-        null,
-        null,
-        _t('页脚自定义文字'),
-        _t('显示在页脚版权信息下方，支持 HTML，可换行书写。留空则不显示')
+    $form->addInput(
+        (new \Typecho\Widget\Helper\Form\Element\Number(
+            'recentPostCount',
+            null,
+            5,
+            _t('最新文章数量'),
+            _t('侧栏「最新文章」显示几条，建议 3 - 10')
+        ))->addRule('isInteger', _t('请填写数字'))
     );
 
-    $form->addInput($footerField);
+    /* ================= 页脚 ================= */
 
-    if ($footerField->input instanceof \Typecho\Widget\Helper\Layout) {
-        $footerField->input->setAttribute('rows', 3);
-        $footerField->input->setAttribute('class', 'text w-100');
-        $footerField->input->setAttribute('style', 'resize:vertical;min-height:72px;');
-    }
-
-    $footerField->addRule('maxLength', _t('内容过长，建议不超过 500 字'), 500);
+    ghostline_config_group($form, _t('页脚'), _t('版权、备案号与自定义说明文字'));
 
     $form->addInput(
         (new \Typecho\Widget\Helper\Form\Element\Text(
@@ -359,6 +336,24 @@ function themeConfig($form)
         ))->addRule('maxLength', _t('备案号过长'), 60)
     );
 
+    $footerField = new \Typecho\Widget\Helper\Form\Element\Textarea(
+        'footerText',
+        null,
+        null,
+        _t('自定义文字'),
+        _t('显示在页脚版权信息下方，支持 HTML，可换行书写。留空则不显示')
+    );
+
+    $form->addInput($footerField);
+
+    if ($footerField->input instanceof \Typecho\Widget\Helper\Layout) {
+        $footerField->input->setAttribute('rows', 3);
+        $footerField->input->setAttribute('class', 'text w-100');
+        $footerField->input->setAttribute('style', 'resize:vertical;min-height:72px;');
+    }
+
+    $footerField->addRule('maxLength', _t('内容过长，建议不超过 500 字'), 500);
+
     $form->addInput(
         new \Typecho\Widget\Helper\Form\Element\Radio(
             'hidePoweredBy',
@@ -367,14 +362,14 @@ function themeConfig($form)
                 '1' => _t('隐藏'),
             ],
             '0',
-            _t('页脚版权信息'),
+            _t('版权信息'),
             _t('是否保留「由 Typecho 驱动 · 主题 Ghostline」一行')
         )
     );
 
-    /* ---------------- 功能开关 ---------------- */
+    /* ================= 功能开关 ================= */
 
-    ghostline_config_group($form, _t('功能开关'), _t('按需开启或关闭各项功能模块'));
+    ghostline_config_group($form, _t('功能开关'), _t('按需开启或关闭各功能模块'));
 
     $form->addInput(
         new \Typecho\Widget\Helper\Form\Element\Checkbox(
