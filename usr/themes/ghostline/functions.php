@@ -82,9 +82,29 @@ function themeConfig($form)
         ))->addRule('regexp', _t('请填写合法的颜色值，例如 #2f6feb'), '/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/')
     );
 
-    /* ---------------- 布局 ---------------- */
+    /* ---------------- 首页设置 ---------------- */
 
-    ghostline_config_group($form, _t('列表布局'), _t('首页文章的呈现方式与信息密度'));
+    ghostline_config_group($form, _t('首页设置'), _t('首页顶部标题、副标题与文章列表样式'));
+
+    $form->addInput(
+        (new \Typecho\Widget\Helper\Form\Element\Text(
+            'homeTitle',
+            null,
+            null,
+            _t('首页标题'),
+            _t('显示在首页顶部的大标题，留空则使用站点标题')
+        ))->addRule('maxLength', _t('标题过长'), 60)
+    );
+
+    $form->addInput(
+        (new \Typecho\Widget\Helper\Form\Element\Text(
+            'homeSubtitle',
+            null,
+            null,
+            _t('首页副标题'),
+            _t('显示在标题下方的一句话，留空则使用站点描述')
+        ))->addRule('maxLength', _t('副标题过长'), 200)
+    );
 
     $form->addInput(
         new \Typecho\Widget\Helper\Form\Element\Select(
@@ -489,6 +509,38 @@ function ghostline_home_layout(): string
     $layout = ghostline_option('homeLayout', 'card');
 
     return in_array($layout, ['card', 'compact', 'classic'], true) ? $layout : 'card';
+}
+
+/**
+ * 首页大标题，留空时回退到站点标题
+ *
+ * @return string
+ */
+function ghostline_home_title(): string
+{
+    $title = (string) ghostline_option('homeTitle', '');
+
+    if ($title !== '') {
+        return $title;
+    }
+
+    return (string) \Typecho\Widget::widget('\Widget\Options')->title;
+}
+
+/**
+ * 首页副标题，留空时回退到站点描述
+ *
+ * @return string
+ */
+function ghostline_home_subtitle(): string
+{
+    $subtitle = (string) ghostline_option('homeSubtitle', '');
+
+    if ($subtitle !== '') {
+        return $subtitle;
+    }
+
+    return (string) \Typecho\Widget::widget('\Widget\Options')->description;
 }
 
 /**

@@ -20,9 +20,10 @@ $isHome = $this->is('index');
 
         <?php if ($isHome): ?>
             <header class="page-intro">
-                <h1 class="page-title"><?php $this->options->title(); ?></h1>
-                <?php if ($this->options->description): ?>
-                    <p class="page-lead"><?php $this->options->description(); ?></p>
+                <h1 class="page-title"><?php echo htmlspecialchars(ghostline_home_title(), ENT_QUOTES, 'UTF-8'); ?></h1>
+                <?php $homeSubtitle = ghostline_home_subtitle(); ?>
+                <?php if ($homeSubtitle !== ''): ?>
+                    <p class="page-lead"><?php echo htmlspecialchars($homeSubtitle, ENT_QUOTES, 'UTF-8'); ?></p>
                 <?php endif; ?>
             </header>
         <?php else: ?>
