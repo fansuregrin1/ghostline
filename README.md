@@ -63,7 +63,7 @@ git clone https://github.com/your-name/ghostline.git
 
 ```bash
 # 启动本地站点
-php -S 127.0.0.1:8080 -t dev/typecho
+php -S 127.0.0.1:8099 -t dev/typecho
 
 # 重新生成测试数据
 php dev/seed.php
