@@ -1,0 +1,19 @@
+# 本地开发环境（Typecho 源码、SQLite 数据库、测试脚本）
+/dev/
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# 主题打包产物
+/dist/
+*.zip
+
+# 依赖（如果需要构建工具时）
+node_modules/
+
+# 日志
+*.log

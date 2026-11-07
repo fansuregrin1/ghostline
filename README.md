@@ -1,0 +1,95 @@
+# Ghostline
+
+> a quiet line between ghost and shell.
+
+一个为 [Typecho](https://typecho.org) 写的博客主题：现代、简洁、克制，带一点点冷色调的科幻气质。
+名字来自《攻壳机动队》的 *Ghost in the Shell*。
+
+![Ghostline](https://raw.githubusercontent.com/your-name/ghostline/main/usr/themes/ghostline/screenshot.png)
+
+## 特性
+
+- **简洁的阅读体验**：全宽文章流 + 可选侧栏，正文排版专注可读性
+- **明暗双主题**：默认跟随系统，支持手动切换并记住偏好（无闪烁）
+- **文章目录**：文章页自动生成 h2 / h3 目录，可折叠
+- **代码块增强**：一键复制、语言标记、等宽字体优化
+- **上一篇 / 下一篇** 导航、预计阅读时间、返回顶部
+- **响应式**：手机、平板、桌面自适应
+- **可配置**：强调色、页脚文字、各项功能开关都能在后台调整
+- 无前端框架、无构建步骤，纯原生 PHP + CSS + JS
+
+## 环境要求
+
+- Typecho **1.3.0** 或更高
+- PHP **7.4+**（推荐 8.1+）
+
+## 安装
+
+### 方式一：下载 zip
+
+1. 下载本仓库的 Release 压缩包
+2. 解压后把 `ghostline` 文件夹放进 Typecho 的 `usr/themes/` 目录
+3. 登录后台 → **控制台 → 外观** → 启用 **Ghostline**
+
+### 方式二：git clone
+
+```bash
+cd /path/to/typecho/usr/themes
+git clone https://github.com/your-name/ghostline.git
+```
+
+然后在后台启用即可。
+
+> `usr/themes/ghostline/` 是主题本体。仓库根目录的其他文件（`dev/`）只用于本地开发，不需要部署。
+
+## 配置
+
+启用主题后，进入 **控制台 → 外观 → 设置外观**，可以调整：
+
+| 选项 | 说明 |
+| --- | --- |
+| 强调色 | 品牌色，默认暗蓝 `#2f6feb` |
+| 页脚自定义文字 | 支持 HTML，留空不显示 |
+| 在列表页显示侧栏 | 首页 / 归档页是否显示右侧栏 |
+| 在文章页显示文章目录 | 自动生成 h2 / h3 目录 |
+| 显示预计阅读时间 | 按 400 字/分钟估算 |
+| 显示返回顶部按钮 | 滚动超过 600px 后出现 |
+| 显示上一篇 / 下一篇 | 文章底部导航 |
+| 开放评论区 | 关闭后文章页不渲染评论模块 |
+
+## 开发
+
+仓库自带一套本地开发环境，见 [`dev/README.md`](dev/README.md)。
+
+```bash
+# 启动本地站点
+php -S 127.0.0.1:8080 -t dev/typecho
+
+# 重新生成测试数据
+php dev/seed.php
+
+# 打包主题
+bash scripts/package.sh
+```
+
+## 目录结构
+
+```
+usr/themes/ghostline/
+├── screenshot.png     后台预览图
+├── functions.php      主题配置、辅助函数
+├── header.php         公共头部
+├── footer.php         公共页脚
+├── sidebar.php        侧栏
+├── index.php          首页 / 归档列表
+├── post.php           文章详情
+├── page.php           独立页面
+├── comments.php       评论区
+├── 404.php            404 页
+├── style.css          样式
+└── assets/js/main.js  前端交互
+```
+
+## 许可
+
+[GPL-3.0](LICENSE) © Ghostline
