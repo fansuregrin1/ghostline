@@ -1,5 +1,7 @@
-# 本地开发环境（Typecho 源码、SQLite 数据库、测试脚本）
-/dev/
+# 本地开发环境中的产物（源码与数据库不入库）
+/dev/typecho/
+/dev/db/
+/dev/router.php
 
 # 系统 / 编辑器
 .DS_Store
