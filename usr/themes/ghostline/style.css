@@ -631,8 +631,6 @@ button {
 
 .post-header {
     margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border);
 }
 
 .post-title {
@@ -1075,8 +1073,6 @@ button {
     flex-wrap: wrap;
     gap: 0.4rem;
     margin-top: 2.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
 }
 
 .post-tags a {
@@ -1148,8 +1144,6 @@ button {
 .comments {
     max-width: var(--measure);
     margin-top: 3.5rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
 }
 
 .section-title {
@@ -2153,11 +2147,10 @@ body.lightbox-open {
     margin: 0;
     padding: 0;
     list-style: none;
-    border-top: 1px solid var(--border);
 }
 
-.archive-item {
-    border-bottom: 1px solid var(--border);
+.archive-item + .archive-item {
+    margin-top: 0.15rem;
 }
 
 .archive-link {
@@ -2416,9 +2409,7 @@ body.lightbox-open {
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.6rem;
     font-size: 1.0625rem;
     font-weight: 650;
     color: var(--text);
@@ -2633,8 +2624,6 @@ body.lightbox-open {
     flex-wrap: wrap;
     gap: 0.25rem;
     margin-bottom: 0.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border);
 }
 
 .emoji-tab {
@@ -2750,13 +2739,15 @@ body.lightbox-open {
         position: static;
         display: block;
         margin-top: 2.5rem;
-        padding-top: 0.5rem;
-        border-top: 1px solid var(--border);
     }
 
     /* 移动端：侧栏折叠成手风琴面板 */
     .sidebar .widget {
-        border-bottom: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+    }
+
+    .sidebar .widget:hover {
+        background: var(--bg-soft);
     }
 
     .sidebar .widget > .widget-title {
