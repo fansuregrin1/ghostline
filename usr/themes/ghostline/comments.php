@@ -103,15 +103,42 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
                     <textarea rows="6" name="text" id="textarea" required data-comment-input><?php $this->remember('text'); ?></textarea>
                 </div>
 
-                <?php $emojiSet = ghostline_comment_emoji(); ?>
-                <div class="emoji-panel" data-emoji-panel hidden>
-                    <div class="emoji-grid">
-                        <?php foreach ($emojiSet as $name => $char): ?>
-                            <button type="button" class="emoji-btn"
-                                    data-emoji="<?php echo htmlspecialchars($char, ENT_QUOTES, 'UTF-8'); ?>"
-                                    title="<?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?>">
-                                <?php echo htmlspecialchars($char, ENT_QUOTES, 'UTF-8'); ?>
-                            </button>
+                <?php $emojiGroups = ghostline_comment_emoji(); ?>
+                <div class="emoji-anchor">
+                    <div class="emoji-panel" data-emoji-panel hidden>
+                        <div class="emoji-tabs" role="tablist">
+                            <button type="button" class="emoji-tab" data-emoji-tab="recent"
+                                    role="tab" aria-selected="false" hidden><?php _e('最近'); ?></button>
+                            <?php $firstTab = true; ?>
+                            <?php foreach ($emojiGroups as $groupName => $items): ?>
+                                <button type="button" class="emoji-tab<?php echo $firstTab ? ' is-active' : ''; ?>"
+                                        data-emoji-tab="<?php echo htmlspecialchars(md5($groupName), ENT_QUOTES, 'UTF-8'); ?>"
+                                        role="tab" aria-selected="<?php echo $firstTab ? 'true' : 'false'; ?>">
+                                    <?php echo htmlspecialchars($groupName, ENT_QUOTES, 'UTF-8'); ?>
+                                </button>
+                                <?php $firstTab = false; ?>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <div class="emoji-pane" data-emoji-pane="recent" hidden>
+                            <div class="emoji-grid" data-emoji-recent></div>
+                        </div>
+
+                        <?php $firstGroup = true; ?>
+                        <?php foreach ($emojiGroups as $groupName => $items): ?>
+                            <div class="emoji-pane" data-emoji-pane="<?php echo htmlspecialchars(md5($groupName), ENT_QUOTES, 'UTF-8'); ?>"
+                                <?php echo $firstGroup ? '' : 'hidden'; ?>>
+                                <div class="emoji-grid">
+                                    <?php foreach ($items as $name => $char): ?>
+                                        <button type="button" class="emoji-btn"
+                                                data-emoji="<?php echo htmlspecialchars($char, ENT_QUOTES, 'UTF-8'); ?>"
+                                                title="<?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?>">
+                                            <?php echo htmlspecialchars($char, ENT_QUOTES, 'UTF-8'); ?>
+                                        </button>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                            <?php $firstGroup = false; ?>
                         <?php endforeach; ?>
                     </div>
                 </div>

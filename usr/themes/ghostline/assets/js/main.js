@@ -990,15 +990,102 @@
     (function () {
         var toggle = document.querySelector('[data-emoji-toggle]');
         var panel = document.querySelector('[data-emoji-panel]');
+        var anchor = document.querySelector('.emoji-anchor');
         var input = document.querySelector('[data-comment-input]');
 
-        if (!toggle || !panel || !input) {
+        if (!toggle || !panel || !anchor || !input) {
             return;
         }
 
+        var RECENT_KEY = 'ghostline-recent-emoji';
+        var RECENT_MAX = 8;
+
+        var tabs = panel.querySelectorAll('[data-emoji-tab]');
+        var panes = panel.querySelectorAll('[data-emoji-pane]');
+        var recentPane = panel.querySelector('[data-emoji-pane="recent"]');
+        var recentGrid = panel.querySelector('[data-emoji-recent]');
+
+        /* ---- 最近使用 ---- */
+        var readRecent = function () {
+            try {
+                var raw = localStorage.getItem(RECENT_KEY);
+                var list = raw ? JSON.parse(raw) : [];
+                return Array.isArray(list) ? list.filter(function (v) { return typeof v === 'string'; }) : [];
+            } catch (e) {
+                return [];
+            }
+        };
+
+        var writeRecent = function (list) {
+            try {
+                localStorage.setItem(RECENT_KEY, JSON.stringify(list));
+            } catch (e) {}
+        };
+
+        var renderRecent = function () {
+            if (!recentGrid) {
+                return;
+            }
+
+            var list = readRecent();
+            recentGrid.innerHTML = '';
+
+            var recentTab = panel.querySelector('[data-emoji-tab="recent"]');
+
+            if (!list.length) {
+                if (recentTab) {
+                    recentTab.hidden = true;
+                }
+                if (recentPane) {
+                    recentPane.hidden = true;
+                }
+                return;
+            }
+
+            if (recentTab) {
+                recentTab.hidden = false;
+            }
+
+            list.forEach(function (char) {
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'emoji-btn';
+                btn.setAttribute('data-emoji', char);
+                btn.textContent = char;
+                recentGrid.appendChild(btn);
+            });
+        };
+
+        var pushRecent = function (char) {
+            var list = readRecent().filter(function (v) { return v !== char; });
+            list.unshift(char);
+            writeRecent(list.slice(0, RECENT_MAX));
+            renderRecent();
+        };
+
+        /* ---- 面板开关 ---- */
         var openPanel = function () {
+            renderRecent();
+
             panel.hidden = false;
             toggle.setAttribute('aria-expanded', 'true');
+
+            // 悬浮定位：面板底部对齐按钮顶部，水平右对齐
+            var anchorRect = anchor.getBoundingClientRect();
+            var panelRect = panel.getBoundingClientRect();
+            var margin = 8;
+
+            panel.style.position = 'absolute';
+            panel.style.bottom = 'calc(100% + ' + margin + 'px)';
+            panel.style.right = '0';
+            panel.style.left = 'auto';
+            panel.style.zIndex = '20';
+
+            // 若上方空间不足，则改为向下展开
+            if (anchorRect.top < panelRect.height + margin + 20) {
+                panel.style.bottom = 'auto';
+                panel.style.top = 'calc(100% + ' + margin + 'px)';
+            }
         };
 
         var closePanel = function () {
@@ -1027,7 +1114,26 @@
             }
         });
 
-        // 插入表情到光标位置
+        /* ---- 分类切换 ---- */
+        tabs.forEach(function (tab) {
+            tab.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                var key = tab.getAttribute('data-emoji-tab');
+
+                tabs.forEach(function (t) {
+                    var active = t === tab;
+                    t.classList.toggle('is-active', active);
+                    t.setAttribute('aria-selected', active ? 'true' : 'false');
+                });
+
+                panes.forEach(function (p) {
+                    p.hidden = p.getAttribute('data-emoji-pane') !== key;
+                });
+            });
+        });
+
+        /* ---- 插入表情 ---- */
         panel.addEventListener('click', function (event) {
             var btn = event.target.closest('[data-emoji]');
 
@@ -1047,6 +1153,8 @@
             var pos = start + emoji.length;
             input.setSelectionRange(pos, pos);
             input.focus();
+
+            pushRecent(emoji);
         });
 
         // Esc 关闭
