@@ -678,6 +678,9 @@
             return others.length === 0;
         };
 
+        var lightboxImages = [];   // 可切换的全部大图
+        var lightboxIndex = -1;    // 当前显示的下标
+
         var closeLightbox = function () {
             if (!lightbox) {
                 return;
@@ -701,24 +704,105 @@
         var onLightboxKey = function (event) {
             if (event.key === 'Escape') {
                 closeLightbox();
+            } else if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                stepLightbox(-1);
+            } else if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                stepLightbox(1);
             }
         };
 
-        var openLightbox = function (src, alt) {
+        var stepLightbox = function (delta) {
+            if (!lightbox || lightboxImages.length < 2) {
+                return;
+            }
+
+            lightboxIndex = (lightboxIndex + delta + lightboxImages.length) % lightboxImages.length;
+            updateLightbox();
+        };
+
+        var updateLightbox = function () {
+            if (!lightbox) {
+                return;
+            }
+
+            var target = lightboxImages[lightboxIndex];
+
+            if (!target) {
+                return;
+            }
+
+            var img = lightbox.querySelector('img');
+
+            if (img) {
+                img.src = target.src;
+                img.alt = target.alt || '';
+            }
+
+            var counter = lightbox.querySelector('.image-lightbox-counter');
+
+            if (counter) {
+                counter.textContent = (lightboxIndex + 1) + ' / ' + lightboxImages.length;
+            }
+
+            var prev = lightbox.querySelector('.image-lightbox-nav.is-prev');
+            var next = lightbox.querySelector('.image-lightbox-nav.is-next');
+            var single = lightboxImages.length < 2;
+
+            if (prev) {
+                prev.hidden = single;
+            }
+            if (next) {
+                next.hidden = single;
+            }
+        };
+
+        var openLightbox = function (index) {
             if (lightbox) {
                 closeLightbox();
+            }
+
+            lightboxIndex = index;
+            var target = lightboxImages[index];
+
+            if (!target) {
+                return;
             }
 
             lightbox = document.createElement('div');
             lightbox.className = 'image-lightbox';
             lightbox.setAttribute('role', 'dialog');
             lightbox.setAttribute('aria-modal', 'true');
-            lightbox.setAttribute('aria-label', alt || '图片预览');
+            lightbox.setAttribute('aria-label', target.alt || '图片预览');
 
             var img = document.createElement('img');
-            img.src = src;
-            img.alt = alt || '';
+            img.src = target.src;
+            img.alt = target.alt || '';
             lightbox.appendChild(img);
+
+            // 多图时提供左右切换按钮与计数
+            if (lightboxImages.length > 1) {
+                ['prev', 'next'].forEach(function (dir) {
+                    var nav = document.createElement('button');
+                    nav.type = 'button';
+                    nav.className = 'image-lightbox-nav is-' + dir;
+                    nav.setAttribute('aria-label', dir === 'prev' ? '上一张' : '下一张');
+                    nav.innerHTML = dir === 'prev'
+                        ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>'
+                        : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>';
+                    nav.addEventListener('click', function (event) {
+                        event.stopPropagation();
+                        stepLightbox(dir === 'prev' ? -1 : 1);
+                    });
+                    lightbox.appendChild(nav);
+                });
+
+                var counter = document.createElement('span');
+                counter.className = 'image-lightbox-counter';
+                counter.setAttribute('aria-hidden', 'true');
+                lightbox.appendChild(counter);
+            }
 
             var closeBtn = document.createElement('button');
             closeBtn.type = 'button';
@@ -729,6 +813,8 @@
 
             document.body.appendChild(lightbox);
             document.body.classList.add('lightbox-open');
+
+            updateLightbox();
 
             // 触发过渡
             window.requestAnimationFrame(function () {
@@ -749,7 +835,7 @@
             document.addEventListener('keydown', onLightboxKey);
         };
 
-        // 标记独立大图并绑定点击放大
+        // 收集正文里的独立大图，并绑定点击放大
         contentArea.querySelectorAll('img').forEach(function (img) {
             if (!isStandaloneImage(img)) {
                 return;
@@ -757,10 +843,59 @@
 
             img.classList.add('is-figure');
 
+            var index = lightboxImages.length;
+            lightboxImages.push(img);
+
             img.addEventListener('click', function () {
-                openLightbox(img.currentSrc || img.src, img.alt);
+                openLightbox(index);
             });
         });
+    }
+
+    /* ---------- 阅读进度条 ---------- */
+    var progress = document.querySelector('[data-reading-progress]');
+    var progressBar = document.querySelector('[data-reading-progress-bar]');
+
+    if (progress && progressBar && contentArea) {
+        var progressTicking = false;
+
+        var updateProgress = function () {
+            var rect = contentArea.getBoundingClientRect();
+            var viewport = window.innerHeight;
+            // 预留一部分视口，使进度在文章读完时恰好到达 100%
+            var offset = viewport * 0.35;
+            var total = rect.height - offset;
+            var scrolled = -rect.top + offset;
+            var ratio = total > 0 ? scrolled / total : 0;
+
+            ratio = Math.min(1, Math.max(0, ratio));
+
+            // 页面顶部时不显示，避免一条细线影响观感
+            var started = window.scrollY > 40 || rect.top < -40;
+            progress.hidden = !started;
+
+            progressBar.style.width = ratio > 0
+                ? (ratio * 100).toFixed(2) + '%'
+                : '0%';
+        };
+
+        var scheduleProgress = function () {
+            if (progressTicking) {
+                return;
+            }
+
+            progressTicking = true;
+            window.requestAnimationFrame(function () {
+                updateProgress();
+                progressTicking = false;
+            });
+        };
+
+        window.addEventListener('scroll', scheduleProgress, { passive: true });
+        window.addEventListener('resize', scheduleProgress);
+        // 锚点跳转（如点击目录）也应立即刷新
+        window.addEventListener('hashchange', scheduleProgress);
+        updateProgress();
     }
 
     /* ---------- 返回顶部 ---------- */

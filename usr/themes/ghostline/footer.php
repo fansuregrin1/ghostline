@@ -13,6 +13,12 @@ $options = $this->options;
 ?>
 </main>
 
+<?php if ($this->is('post') || $this->is('page')): ?>
+    <div class="reading-progress" data-reading-progress hidden>
+        <span class="reading-progress-bar" data-reading-progress-bar></span>
+    </div>
+<?php endif; ?>
+
 <footer class="site-footer">
     <div class="shell footer-inner">
         <p class="copyright">

@@ -5,7 +5,7 @@
 一个为 [Typecho](https://typecho.org) 写的博客主题：现代、简洁、克制，带一点点冷色调的科幻气质。
 名字来自《攻壳机动队》的 *Ghost in the Shell*。
 
-![Ghostline](https://raw.githubusercontent.com/your-name/ghostline/main/usr/themes/ghostline/screenshot.png)
+![Ghostline](https://raw.githubusercontent.com/fansuregrin1/ghostline/main/usr/themes/ghostline/screenshot.png)
 
 ## 特性
 
@@ -14,7 +14,8 @@
 - **文章目录**：自动生成 h2 / h3 / h4 嵌套目录，可逐级折叠，跟随阅读高亮当前章节
 - **搜索弹窗**：居中模态搜索，输入即出候选，支持 ↑↓ 选择与 `Cmd/Ctrl + K` 唤起
 - **代码块增强**：语法高亮、行号、语言标签、一键复制
-- **图片优化**：行内图标对齐、长图限高、点击灯箱预览
+- **图片优化**：行内图标对齐、长图限高、灯箱预览（多图可左右切换）
+- **阅读进度条**：文章页顶部显示阅读进度
 - **文章封面图**：可为每篇文章单独设置列表缩略图
 - **上一篇 / 下一篇** 导航、预计阅读时间、返回顶部
 - **响应式**：手机、平板、桌面自适应
@@ -38,7 +39,7 @@
 
 ```bash
 cd /path/to/typecho/usr/themes
-git clone https://github.com/your-name/ghostline.git
+git clone https://github.com/fansuregrin1/ghostline.git
 ```
 
 然后在后台启用即可。
@@ -127,7 +128,9 @@ usr/themes/ghostline/
 ├── header.php          公共头部（含搜索弹窗）
 ├── footer.php          公共页脚
 ├── sidebar.php         侧栏
-├── index.php           首页 / 归档列表
+├── index.php           首页
+├── category.php        分类归档（紧凑标题列表）
+├── tag.php             标签归档（紧凑标题列表）
 ├── post.php            文章详情
 ├── page.php            独立页面
 ├── comments.php        评论区

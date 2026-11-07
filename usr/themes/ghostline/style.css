@@ -1800,6 +1800,64 @@ body.search-open {
     transition: background-color 0.15s var(--ease);
 }
 
+/* 左右切换按钮 */
+.image-lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    color: #e6ecf5;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 50%;
+    transition: background-color 0.15s var(--ease), transform 0.15s var(--ease);
+}
+
+.image-lightbox-nav:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.image-lightbox-nav.is-prev {
+    left: clamp(0.5rem, 2vw, 1.75rem);
+}
+
+.image-lightbox-nav.is-next {
+    right: clamp(0.5rem, 2vw, 1.75rem);
+}
+
+.image-lightbox-nav[hidden] {
+    display: none;
+}
+
+.image-lightbox-nav svg {
+    width: 1.15rem;
+    height: 1.15rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* 图片计数 */
+.image-lightbox-counter {
+    position: absolute;
+    bottom: clamp(0.75rem, 2vw, 1.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.2rem 0.7rem;
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    color: #cbd6e6;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+}
+
 .image-lightbox-close:hover {
     background: rgba(255, 255, 255, 0.2);
 }
@@ -1815,6 +1873,99 @@ body.search-open {
 
 body.lightbox-open {
     overflow: hidden;
+}
+
+/* ---------- 归档页：紧凑标题列表 ---------- */
+.page-kicker {
+    margin: 0 0 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+}
+
+.page-count {
+    margin: 0.6rem 0 0;
+    font-size: 0.875rem;
+    color: var(--text-faint);
+}
+
+.page-count strong {
+    color: var(--text-soft);
+    font-variant-numeric: tabular-nums;
+}
+
+.archive-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--border);
+}
+
+.archive-item {
+    border-bottom: 1px solid var(--border);
+}
+
+.archive-link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 0.85rem 0.35rem;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.15s var(--ease), padding-left 0.15s var(--ease);
+}
+
+.archive-link:hover {
+    background: var(--bg-soft);
+    padding-left: 0.7rem;
+    opacity: 1;
+}
+
+.archive-title {
+    min-width: 0;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.archive-link:hover .archive-title {
+    color: var(--accent);
+}
+
+.archive-date {
+    flex-shrink: 0;
+    color: var(--text-faint);
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 阅读进度条 ---------- */
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 45;
+    height: 2px;
+    background: transparent;
+    pointer-events: none;
+}
+
+.reading-progress[hidden] {
+    display: none;
+}
+
+.reading-progress-bar {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+    border-radius: 0 2px 2px 0;
+    transition: width 0.08s linear;
+    box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 55%, transparent);
 }
 
 /* ---------- 响应式 ---------- */

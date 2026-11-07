@@ -7,7 +7,7 @@
  * @package Ghostline
  * @author Ghostline
  * @version 0.2.0
- * @link https://github.com/typecho-themes/ghostline
+ * @link https://github.com/fansuregrin1/ghostline
  */
 
 if (!defined('__TYPECHO_ROOT_DIR__')) {
