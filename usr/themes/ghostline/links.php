@@ -2,19 +2,18 @@
 /**
  * 友情链接
  *
- * 在页面编辑页的「自定义模板」中选择「友情链接」即可启用。
- *
- * 页面正文里每行写一个链接，格式：
- *   名称|地址|一句话描述|头像地址
- * 其中后两项可省略，例如：
- *   Typecho|https://typecho.org|一个轻量的博客程序|https://typecho.org/logo.png
- *
  * @package custom
  */
 
 if (!defined('__TYPECHO_ROOT_DIR__')) {
     exit;
 }
+
+// 在页面编辑页的「自定义模板」中选择「友情链接」即可启用。
+// 页面正文里每行写一个链接，格式：
+//   名称|地址|一句话描述|头像地址
+// 其中后两项可省略，例如：
+//   Typecho|https://typecho.org|一个轻量的博客程序|https://typecho.org/logo.png
 
 $this->need('header.php');
 
