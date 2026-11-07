@@ -6,6 +6,9 @@
  *
  * 会创建 3 篇演示图片用法的文章，图片放在 dev/typecho/usr/uploads/2026/11/。
  * 仅用于本地开发环境。
+ *
+ * 配图来自 Unsplash（https://unsplash.com/license），Unsplash License 允许
+ * 免费商用与修改、无需署名。图片已下载到本地，不依赖外网。
  */
 
 $dbFile = __DIR__ . '/db/site.db';
@@ -60,6 +63,7 @@ $articles = [];
 $articles[] = [
     'title' => '图片基础用法演示',
     'slug'  => 'image-basics',
+    'cover' => 'cover-code.jpg',
     'cat'   => 'tech',
     'tags'  => ['前端', '设计'],
     'day'   => 1,
@@ -70,13 +74,13 @@ $articles[] = [
 
 Markdown 里写 `![说明](图片地址)` 即可插入图片。独占一段的图片会自动居中、限制最大高度：
 
-![渐变封面]({$base}/cover-synth.png)
+![代码编辑器]({$base}/cover-code.jpg)
 
 ## 带图注的图片
 
 图片下方可以补一行斜体作为图注，排版上会与图片保持适当间距：
 
-![竖构图示意图]({$base}/portrait.png)
+![开发者工具截图]({$base}/portrait-screen.jpg)
 
 *图 1：竖构图的图片会被等比缩放，并限制最大高度为视口的 70%。*
 
@@ -92,7 +96,7 @@ Markdown 里写 `![说明](图片地址)` 即可插入图片。独占一段的�
 
 小图按原尺寸显示，不会被强行拉伸：
 
-![示意图]({$base}/diagram.png)
+![工作台]({$base}/photo-desk.jpg)
 MD,
 ];
 
@@ -102,6 +106,7 @@ MD,
 $articles[] = [
     'title' => '图文混排与排版细节',
     'slug'  => 'image-layout',
+    'cover' => 'wide-banner.jpg',
     'cat'   => 'design',
     'tags'  => ['设计', '前端'],
     'day'   => 2,
@@ -112,19 +117,19 @@ $articles[] = [
 
 宽幅图片会被压缩到正文宽度，保持比例不失真：
 
-![超宽横幅]({$base}/banner-wide.png)
+![太空俯瞰]({$base}/wide-banner.jpg)
 
 ## 行内小图标
 
 段落中插入的小图标应当与文字保持合适的垂直对齐，而不是把整段拆成几行：
 
-调整页面强调色时，可以点击顶栏的切换按钮，或者使用快捷键 <img src="{$base}/icon-ghost.png" alt="图标"> 打开搜索。图标不应该撑破行高。
+调整页面强调色时，可以点击顶栏的切换按钮，或者使用快捷键 <img src="{$base}/icon-search.svg" alt="图标"> 打开搜索。图标不应该撑破行高。
 
 ## 图片嵌套链接
 
 图片外层套一个链接，点击图片即可跳转：
 
-[![可点击的横幅]({$base}/banner-wide.png)](https://typecho.org)
+[![可点击的图片]({$base}/wide-banner.jpg)](https://typecho.org)
 
 ## 图文交替
 
@@ -132,7 +137,7 @@ $articles[] = [
 
 先看整体效果。下面这张图展示了页面的视觉层级：标题、正文、图片、说明文字，依次递进。
 
-![示意图]({$base}/diagram.png)
+![工作台]({$base}/photo-desk.jpg)
 
 图片之后的文字继续保持相同的行高与段距，不会因为图片的插入而变得松散。
 MD,
@@ -144,6 +149,7 @@ MD,
 $articles[] = [
     'title' => '图片与代码块的组合排版',
     'slug'  => 'image-inline',
+    'cover' => 'photo-desk.jpg',
     'cat'   => 'tech',
     'tags'  => ['Typecho', 'PHP', '前端'],
     'day'   => 3,
@@ -152,7 +158,7 @@ $articles[] = [
 
 ## 先看效果图
 
-![示意图]({{BASE}}/diagram.png)
+![工作台]({{BASE}}/photo-desk.jpg)
 
 ## 对应的实现
 
@@ -193,13 +199,18 @@ function render_gallery(array $images): string
 
 ## 再放一张竖图收尾
 
-![竖构图]({{BASE}}/portrait.png)
+![竖版截图]({{BASE}}/portrait-screen.jpg)
 
 代码块和图片之间有统一的垂直间距，视觉上不会挤在一起。
 MD,
 ];
 
 $created = [];
+$fieldStmt = $pdo->prepare(
+    "INSERT INTO {$prefix}fields (cid, name, type, str_value, int_value, float_value)
+     VALUES (?, 'cover', 'str', ?, 0, 0)"
+);
+
 foreach ($articles as $a) {
     $ts = $now - ($a['day'] * 86400);
     $text = str_replace('{{BASE}}', $base, $a['text']);
@@ -215,6 +226,11 @@ foreach ($articles as $a) {
         if (isset($tags[$t])) {
             $rel->execute([$cid, $tags[$t]]);
         }
+    }
+
+    // 设置封面图，让列表页展示缩略图
+    if (!empty($a['cover'])) {
+        $fieldStmt->execute([$cid, $base . '/' . $a['cover']]);
     }
 }
 
