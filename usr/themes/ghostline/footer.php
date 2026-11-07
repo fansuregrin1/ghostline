@@ -24,6 +24,14 @@ $options = $this->options;
         <p class="copyright">
             &copy; <?php echo date('Y'); ?>
             <a href="<?php $options->siteUrl(); ?>"><?php $options->title(); ?></a>
+            <span class="footer-sep" aria-hidden="true">·</span>
+            <a class="footer-rss" href="<?php $options->feedUrl(); ?>" rel="alternate" type="application/rss+xml">
+                <svg viewBox="0 0 24 24" aria-hidden="true" aria-label="<?php _e('RSS 订阅'); ?>">
+                    <circle cx="6" cy="18" r="1.6"></circle>
+                    <path d="M5 12a7 7 0 0 1 7 7M4 5a15 15 0 0 1 15 15"></path>
+                </svg>
+                <?php _e('RSS'); ?>
+            </a>
         </p>
 
         <?php

@@ -15,7 +15,7 @@
 - **明暗双主题**：浅色 / 深色 / 跟随系统三态切换，记住偏好且无闪烁
 - **文章目录**：自动生成 h2 / h3 / h4 嵌套目录，可逐级折叠，跟随阅读高亮当前章节
 - **搜索弹窗**：居中模态搜索，输入即出候选，支持 ↑↓ 选择与 `Cmd/Ctrl + K` 唤起
-- **代码块增强**：语法高亮、行号、语言标签、一键复制
+- **代码块增强**：语法高亮、行号、语言标签、一键复制、长代码折叠
 - **图片优化**：行内图标对齐、长图限高、灯箱预览（多图可左右切换）
 - **阅读进度条**：文章页顶部显示阅读进度
 - **文章封面图**：可为每篇文章单独设置列表缩略图
@@ -139,6 +139,7 @@ $keywords = $this->request->filter('search')->get('keywords');
 | ICP 备案号 | 例如 `京ICP备12345678号` |
 | 公安备案号 | 例如 `京公网安备 11010502030143号` |
 | 自定义文字 | 支持 HTML，多行输入 |
+| RSS 入口 | 页脚自动显示 RSS 订阅链接 |
 | 版权信息 | 可隐藏「由 Typecho 驱动 · 主题 Ghostline」 |
 
 ### 功能开关
@@ -204,13 +205,18 @@ bash scripts/package.sh
 ```
 usr/themes/ghostline/
 ├── screenshot.jpg      后台预览图
-├── functions.php       主题配置、自定义字段、辅助函数
+├── functions.php       入口文件（加载 includes/）
+├── includes/
+│   ├── config.php      后台设置表单与文章自定义字段
+│   ├── helpers.php     供模板调用的配置读取函数
+│   └── color.php       预设色板、暗色适配、CSS 变量输出
 ├── header.php          公共头部（含搜索弹窗）
 ├── footer.php          公共页脚
 ├── sidebar.php         侧栏
 ├── index.php           首页
 ├── category.php        分类归档（紧凑标题列表）
 ├── tag.php             标签归档（紧凑标题列表）
+├── archive.php         日期归档（紧凑标题列表）
 ├── post.php            文章详情
 ├── page.php            独立页面
 ├── links.php           友情链接（自定义模板）

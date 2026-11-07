@@ -1205,15 +1205,18 @@ button {
     border-left: 2px solid var(--border);
 }
 
-.comment-list .comment-body .comment-avatar {
-    display: none;
+.comment-list .comment-body .comment-author {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .comment-list .comment-body .comment-author .avatar {
-    width: 1.6rem;
-    height: 1.6rem;
+    width: 1.75rem;
+    height: 1.75rem;
     border-radius: 50%;
-    margin-right: 0.25rem;
+    flex-shrink: 0;
+    object-fit: cover;
 }
 
 /* 评论表单 */
@@ -1410,6 +1413,31 @@ button {
     margin: 0;
     font-size: 0.8125rem;
     color: var(--text-faint);
+}
+
+.footer-sep {
+    margin-inline: 0.35rem;
+    color: var(--border-strong);
+}
+
+.footer-rss {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.footer-rss svg {
+    width: 0.85rem;
+    height: 0.85rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.footer-rss circle {
+    fill: currentColor;
+    stroke: none;
 }
 
 .footer-license a {
@@ -2363,6 +2391,122 @@ body.lightbox-open {
     font-size: 0.75rem;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
+}
+
+/* 长代码折叠 */
+.post-content pre.is-collapsed {
+    max-height: 26rem;
+    overflow: hidden;
+}
+
+.code-fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2.4rem;
+    height: 4rem;
+    background: linear-gradient(to bottom, rgba(15, 22, 38, 0), #0f1626);
+    pointer-events: none;
+}
+
+.post-content pre:not(.is-collapsed) .code-fade,
+.post-content pre:not(.is-collapsed) .code-expand {
+    display: none;
+}
+
+.code-expand {
+    position: absolute;
+    left: 50%;
+    bottom: 0.6rem;
+    transform: translateX(-50%);
+    padding: 0.3rem 0.9rem;
+    font-size: 0.75rem;
+    color: #c3d0e4;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+    transition: background-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+
+.code-expand:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+/* ---------- 打印样式 ---------- */
+@media print {
+    .site-header,
+    .site-footer,
+    .sidebar,
+    .back-top,
+    .reading-progress,
+    .toc,
+    .post-nav,
+    .comments,
+    .search-dialog,
+    .skip-link,
+    .code-copy,
+    .code-expand,
+    .mobile-search {
+        display: none !important;
+    }
+
+    body {
+        background: #fff;
+        color: #000;
+        font-size: 11pt;
+    }
+
+    .shell {
+        max-width: none;
+        padding: 0;
+    }
+
+    .layout.has-sidebar {
+        display: block;
+    }
+
+    .post-content,
+    .post-full {
+        max-width: none;
+    }
+
+    .post-content a {
+        color: #000;
+        text-decoration: underline;
+    }
+
+    /* 打印时展开全部代码 */
+    .post-content pre {
+        max-height: none !important;
+        overflow: visible !important;
+        background: #f5f5f5 !important;
+        color: #000 !important;
+        border: 1px solid #ccc !important;
+        page-break-inside: avoid;
+    }
+
+    .post-content pre .hljs,
+    .post-content pre code {
+        color: #000 !important;
+    }
+
+    .code-fade,
+    .code-lines {
+        display: none !important;
+    }
+
+    .post-content img {
+        max-height: none;
+        page-break-inside: avoid;
+    }
+
+    .post-content h2,
+    .post-content h3,
+    .post-content h4 {
+        page-break-after: avoid;
+    }
 }
 
 /* ---------- 响应式 ---------- */

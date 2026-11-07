@@ -147,6 +147,34 @@
         });
 
         pre.appendChild(button);
+
+        // 长代码折叠：超过阈值时收起，点击展开
+        var COLLAPSE_LINES = 24;
+
+        if (lineCount > COLLAPSE_LINES) {
+            pre.classList.add('is-collapsed');
+
+            var toggle = document.createElement('button');
+            toggle.type = 'button';
+            toggle.className = 'code-expand';
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.textContent = '展开全部 ' + lineCount + ' 行';
+
+            var fade = document.createElement('span');
+            fade.className = 'code-fade';
+            fade.setAttribute('aria-hidden', 'true');
+            pre.appendChild(fade);
+
+            toggle.addEventListener('click', function () {
+                var collapsed = pre.classList.toggle('is-collapsed');
+                toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+                toggle.textContent = collapsed
+                    ? '展开全部 ' + lineCount + ' 行'
+                    : '收起';
+            });
+
+            pre.appendChild(toggle);
+        }
     });
 
     /* ---------- 文章目录（嵌套树，可折叠） ---------- */
