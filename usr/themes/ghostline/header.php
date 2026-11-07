@@ -47,7 +47,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
     <div class="shell header-inner">
         <a class="site-brand" href="<?php $this->options->siteUrl(); ?>">
             <span class="brand-mark" aria-hidden="true"></span>
-            <span class="brand-name"><?php $this->options->title(); ?></span>
+            <span class="brand-name"><?php echo htmlspecialchars(ghostline_brand_title(), ENT_QUOTES, 'UTF-8'); ?></span>
         </a>
 
         <nav class="site-nav" aria-label="<?php _e('主导航'); ?>">

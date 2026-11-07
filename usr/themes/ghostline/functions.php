@@ -82,6 +82,16 @@ function themeConfig($form)
         ))->addRule('regexp', _t('请填写合法的颜色值，例如 #2f6feb'), '/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/')
     );
 
+    $form->addInput(
+        (new \Typecho\Widget\Helper\Form\Element\Text(
+            'brandTitle',
+            null,
+            null,
+            _t('顶栏站点标题'),
+            _t('显示在页面左上角，留空则使用站点标题')
+        ))->addRule('maxLength', _t('标题过长'), 40)
+    );
+
     /* ---------------- 首页设置 ---------------- */
 
     ghostline_config_group($form, _t('首页设置'), _t('首页顶部标题、副标题与文章列表样式'));
@@ -92,8 +102,21 @@ function themeConfig($form)
             null,
             null,
             _t('首页标题'),
-            _t('显示在首页顶部的大标题，留空则使用站点标题')
+            _t('显示在首页顶部的大标题，留空则显示 Ghostline')
         ))->addRule('maxLength', _t('标题过长'), 60)
+    );
+
+    $form->addInput(
+        (new \Typecho\Widget\Helper\Form\Element\Radio(
+            'hideHomeTitle',
+            [
+                '0' => _t('显示'),
+                '1' => _t('隐藏'),
+            ],
+            '0',
+            _t('首页大标题显示'),
+            _t('隐藏后首页直接显示副标题与文章列表，避免与顶栏站名重复')
+        ))
     );
 
     $form->addInput(
@@ -102,8 +125,21 @@ function themeConfig($form)
             null,
             null,
             _t('首页副标题'),
-            _t('显示在标题下方的一句话，留空则使用站点描述')
+            _t('显示在标题下方的一句话，留空则显示默认文案')
         ))->addRule('maxLength', _t('副标题过长'), 200)
+    );
+
+    $form->addInput(
+        new \Typecho\Widget\Helper\Form\Element\Radio(
+            'hideHomeSubtitle',
+            [
+                '0' => _t('显示'),
+                '1' => _t('隐藏'),
+            ],
+            '0',
+            _t('首页副标题显示'),
+            _t('隐藏后首页只显示标题与文章列表')
+        )
     );
 
     $form->addInput(
@@ -532,11 +568,11 @@ function ghostline_home_title(): string
         return $title;
     }
 
-    return (string) \Typecho\Widget::widget('\Widget\Options')->title;
+    return 'Ghostline';
 }
 
 /**
- * 首页副标题，留空时回退到站点描述
+ * 首页副标题，留空时使用默认文案
  *
  * @return string
  */
@@ -548,7 +584,23 @@ function ghostline_home_subtitle(): string
         return $subtitle;
     }
 
-    return (string) \Typecho\Widget::widget('\Widget\Options')->description;
+    return 'A quiet line between ghost and shell.';
+}
+
+/**
+ * 顶栏站点标题，留空时回退到站点标题
+ *
+ * @return string
+ */
+function ghostline_brand_title(): string
+{
+    $brand = (string) ghostline_option('brandTitle', '');
+
+    if ($brand !== '') {
+        return $brand;
+    }
+
+    return (string) \Typecho\Widget::widget('\Widget\Options')->title;
 }
 
 /**
