@@ -5,7 +5,10 @@
 
 /* ---------- 设计变量 ---------- */
 :root {
-    --accent: #2f6feb;
+    /* 亮色 / 暗色两套强调色，由 PHP 注入（见 functions.php） */
+    --accent-light: #2f6feb;
+    --accent-dark: #5b8def;
+    --accent: var(--accent-light);
 
     --bg: #fbfcfe;
     --bg-soft: #f2f5fa;
@@ -36,6 +39,8 @@
 
 /* 暗色主题 */
 :root[data-theme="dark"] {
+    --accent: var(--accent-dark);
+
     --bg: #0b1220;
     --bg-soft: #101a2c;
     --bg-elevated: #131f33;
@@ -51,6 +56,8 @@
 
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
+        --accent: var(--accent-dark);
+
         --bg: #0b1220;
         --bg-soft: #101a2c;
         --bg-elevated: #131f33;
