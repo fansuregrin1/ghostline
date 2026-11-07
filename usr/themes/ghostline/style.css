@@ -732,7 +732,10 @@ button {
 .post-content p img.is-figure {
     display: block;
     margin: 1.5em auto;
+    max-width: 100%;
     max-height: 70vh;
+    width: auto;
+    height: auto;
     border-radius: var(--radius);
     box-shadow: var(--shadow-sm);
     cursor: zoom-in;

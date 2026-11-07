@@ -62,6 +62,16 @@ open http://127.0.0.1:8099/            # 前台
 open http://127.0.0.1:8099/admin/      # 后台
 ```
 
+### 测试数据
+
+```bash
+php dev/seed.php          # 基础文章、分类、标签、评论
+php dev/seed-images.php   # 3 篇演示图片用法的文章
+```
+
+`seed-images.php` 用到的图片在 `dev/typecho/usr/uploads/2026/11/`，
+覆盖了封面图、竖构图、行内图标、超宽横幅等常见场景。
+
 后台账号：`admin` / `ghostline123`
 
 > 以上账号密码仅用于本地开发环境。
