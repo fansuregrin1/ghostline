@@ -120,6 +120,28 @@ button {
     cursor: pointer;
 }
 
+/* 选中文字：使用主题色的淡色版本，文字保持原色以确保可读性 */
+::selection {
+    background: color-mix(in srgb, var(--accent) 40%, transparent);
+    color: inherit;
+}
+
+/* 深色背景上稍加不透明度，避免选中区域过于微弱 */
+:root[data-theme="dark"] ::selection {
+    background: color-mix(in srgb, var(--accent) 46%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) ::selection {
+        background: color-mix(in srgb, var(--accent) 46%, transparent);
+    }
+}
+
+/* 代码块内选中时，保留代码自身的前景色 */
+.post-content pre ::selection {
+    background: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
 :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
