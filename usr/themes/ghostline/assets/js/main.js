@@ -37,6 +37,14 @@
             return;
         }
 
+        // 在 highlight.js 改写 class 之前，先记录作者明确指定的语言
+        var declaredLang = '';
+        var declaredMatch = (code.className || '').match(/(?:^|\s)lang-([\w+#-]+)/i);
+
+        if (declaredMatch) {
+            declaredLang = declaredMatch[1].toLowerCase();
+        }
+
         // Typecho 输出形如 class="lang-php"，highlight.js 可直接识别
         if (window.hljs) {
             try {
@@ -46,6 +54,18 @@
 
         // 行号：优先取高亮后的行数，保证与显示一致
         var lineCount = code.textContent.replace(/\n$/, '').split('\n').length;
+
+        // 语言标签：仅当作者明确指定了语言时才显示。
+        // highlight.js 会对未标注的代码块自动猜测并加上 language-xxx，
+        // 那种猜测不可靠（例如把纯文本猜成 css），因此不展示。
+        if (declaredLang && declaredLang !== 'plaintext' && declaredLang !== 'text') {
+            var label = document.createElement('span');
+            label.className = 'code-lang';
+            label.textContent = declaredLang;
+            label.setAttribute('aria-hidden', 'true');
+            pre.appendChild(label);
+            pre.classList.add('has-lang');
+        }
 
         if (lineCount > 1) {
             var gutter = document.createElement('span');
