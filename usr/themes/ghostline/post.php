@@ -36,7 +36,7 @@ $this->need('header.php');
     <?php if (ghostline_enabled('showToc')): ?>
         <details class="toc" data-toc hidden>
             <summary><?php _e('目录'); ?></summary>
-            <ol class="toc-list" data-toc-list></ol>
+            <ul class="toc-list" data-toc-list></ul>
         </details>
     <?php endif; ?>
 

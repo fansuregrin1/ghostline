@@ -606,14 +606,64 @@ button {
 
 .toc-list {
     margin: 0.75rem 0 0;
-    padding-left: 1.1rem;
+    padding-left: 0.9rem;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.4rem;
+    list-style: none;
+}
+
+.toc-list li {
+    position: relative;
+    padding-left: 1.05rem;
+    line-height: 1.6;
+}
+
+/* 用不同符号区分层级：实心方块 → 短横 → 圆点 */
+.toc-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.78em;
+    width: 0.34rem;
+    height: 0.34rem;
+    border-radius: 1px;
+    background: currentColor;
+    opacity: 0.45;
+}
+
+.toc-list .toc-lv3::before {
+    width: 0.55rem;
+    height: 1.5px;
+    border-radius: 1px;
+    top: 0.95em;
+}
+
+.toc-list .toc-lv4::before {
+    width: 0.28rem;
+    height: 0.28rem;
+    border-radius: 50%;
+    top: 0.82em;
 }
 
 .toc-list a {
     color: var(--text-soft);
+    transition: color 0.15s var(--ease);
+}
+
+.toc-list a:hover {
+    color: var(--accent);
+}
+
+/* 当前阅读位置 */
+.toc-list li.is-current > a {
+    color: var(--accent);
+    font-weight: 550;
+}
+
+.toc-list li.is-current::before {
+    opacity: 1;
+    background: var(--accent);
 }
 
 .toc-list a:hover {

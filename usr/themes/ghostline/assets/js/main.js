@@ -111,6 +111,8 @@
         var headings = article.querySelectorAll('h2, h3, h4');
 
         if (headings.length >= 2) {
+            var tocLinks = [];
+
             headings.forEach(function (heading, index) {
                 if (!heading.id) {
                     heading.id = 'heading-' + (index + 1);
@@ -123,16 +125,76 @@
                 link.href = '#' + heading.id;
                 link.textContent = heading.textContent;
 
-                // h2 顶格，h3 / h4 依次缩进
+                // h2 顶格，h3 / h4 依次缩进并换用不同符号
                 if (level > 2) {
                     item.className = 'toc-lv' + level;
                 }
 
                 item.appendChild(link);
                 tocList.appendChild(item);
+                tocLinks.push(item);
             });
 
             toc.hidden = false;
+
+            /* 滚动时高亮当前所在章节 */
+            var currentIndex = -1;
+
+            var setCurrent = function (index) {
+                if (index === currentIndex) {
+                    return;
+                }
+
+                if (tocLinks[currentIndex]) {
+                    tocLinks[currentIndex].classList.remove('is-current');
+                }
+
+                if (tocLinks[index]) {
+                    tocLinks[index].classList.add('is-current');
+                }
+
+                currentIndex = index;
+            };
+
+            var syncCurrent = function () {
+                // 以「标题顶部越过视口上方 100px」作为切换点
+                var offset = 100;
+                var active = 0;
+
+                for (var i = 0; i < headings.length; i++) {
+                    if (headings[i].getBoundingClientRect().top - offset <= 0) {
+                        active = i;
+                    } else {
+                        break;
+                    }
+                }
+
+                // 滚到底部时固定高亮最后一项，避免末尾章节不被选中
+                var atBottom = window.innerHeight + window.scrollY
+                    >= document.documentElement.scrollHeight - 2;
+
+                if (atBottom) {
+                    active = headings.length - 1;
+                }
+
+                setCurrent(active);
+            };
+
+            var tocTicking = false;
+
+            window.addEventListener('scroll', function () {
+                if (tocTicking) {
+                    return;
+                }
+
+                tocTicking = true;
+                window.requestAnimationFrame(function () {
+                    syncCurrent();
+                    tocTicking = false;
+                });
+            }, { passive: true });
+
+            syncCurrent();
         }
     }
 
