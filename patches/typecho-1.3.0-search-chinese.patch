@@ -1,0 +1,11 @@
+--- a/var/Widget/Archive.php	2026-11-07 12:55:10
++++ b/var/Widget/Archive.php	2026-11-07 12:55:10
+@@ -2067,7 +2067,7 @@
+     {
+         /** 增加自定义搜索引擎接口 */
+         //~ fix issue 40
+-        $keywords = $this->request->filter('url', 'search')->get('keywords');
++        $keywords = $this->request->filter('search')->get('keywords');
+         self::pluginHandle()->trigger($hasPushed)->call('search', $keywords, $this);
+ 
+         if (!$hasPushed) {

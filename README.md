@@ -42,8 +42,40 @@ git clone https://github.com/your-name/ghostline.git
 
 > `usr/themes/ghostline/` 是主题本体。仓库根目录的其他文件（`dev/`）只用于本地开发，不需要部署。
 
-## 配置
+### 重要：中文搜索修复
 
+Typecho 1.3.0 存在一个缺陷：**搜索含中文的关键词会 404**（英文正常）。
+
+原因是 `Archive::searchHandle()` 读取关键词时多套了一层 `'url'` 过滤器，
+它内部经过 `parse_url()`，会把 UTF-8 文本破坏成乱码：
+
+```
+safeUrl('攻壳') => '�_�壳'
+```
+
+这不是主题的问题，任何主题都会遇到。修复只需改一行：
+
+```bash
+# 把 /path/to/typecho 换成你的 Typecho 安装目录
+bash scripts/fix-search.sh /path/to/typecho
+```
+
+手动修复：打开 `var/Widget/Archive.php`，找到 `searchHandle()` 方法，
+把这一行
+
+```php
+$keywords = $this->request->filter('url', 'search')->get('keywords');
+```
+
+改成
+
+```php
+$keywords = $this->request->filter('search')->get('keywords');
+```
+
+也附带了标准补丁：`patches/typecho-1.3.0-search-chinese.patch`。
+
+## 配置
 启用主题后，进入 **控制台 → 外观 → 设置外观**，可以调整：
 
 | 选项 | 说明 |
