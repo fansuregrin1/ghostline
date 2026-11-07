@@ -496,6 +496,124 @@
         desktopQuery.addEventListener('change', syncSidebar);
     }
 
+    /* ---------- 图片灯箱 ---------- */
+    var contentArea = document.querySelector('[data-post-content]');
+
+    if (contentArea) {
+        var lightbox = null;
+
+        /**
+         * 判断图片是否为「独立成段的大图」。
+         * 段落里除了这张图和空白外没有其它内容，就按块级展示并可点击放大。
+         */
+        var isStandaloneImage = function (img) {
+            var paragraph = img.closest('p');
+
+            // 不在段落里（如单独写 <img> 标签）也按块级处理
+            if (!paragraph) {
+                return true;
+            }
+
+            var others = Array.prototype.filter.call(paragraph.childNodes, function (node) {
+                if (node === img) {
+                    return false;
+                }
+
+                if (node.nodeType === 3) {
+                    return node.textContent.trim() !== '';
+                }
+
+                return node.nodeType === 1;
+            });
+
+            return others.length === 0;
+        };
+
+        var closeLightbox = function () {
+            if (!lightbox) {
+                return;
+            }
+
+            lightbox.classList.remove('is-open');
+            document.body.classList.remove('lightbox-open');
+
+            var box = lightbox;
+            lightbox = null;
+
+            window.setTimeout(function () {
+                if (box && box.parentNode) {
+                    box.parentNode.removeChild(box);
+                }
+            }, 200);
+
+            document.removeEventListener('keydown', onLightboxKey);
+        };
+
+        var onLightboxKey = function (event) {
+            if (event.key === 'Escape') {
+                closeLightbox();
+            }
+        };
+
+        var openLightbox = function (src, alt) {
+            if (lightbox) {
+                closeLightbox();
+            }
+
+            lightbox = document.createElement('div');
+            lightbox.className = 'image-lightbox';
+            lightbox.setAttribute('role', 'dialog');
+            lightbox.setAttribute('aria-modal', 'true');
+            lightbox.setAttribute('aria-label', alt || '图片预览');
+
+            var img = document.createElement('img');
+            img.src = src;
+            img.alt = alt || '';
+            lightbox.appendChild(img);
+
+            var closeBtn = document.createElement('button');
+            closeBtn.type = 'button';
+            closeBtn.className = 'image-lightbox-close';
+            closeBtn.setAttribute('aria-label', '关闭预览');
+            closeBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>';
+            lightbox.appendChild(closeBtn);
+
+            document.body.appendChild(lightbox);
+            document.body.classList.add('lightbox-open');
+
+            // 触发过渡
+            window.requestAnimationFrame(function () {
+                if (lightbox) {
+                    lightbox.classList.add('is-open');
+                }
+            });
+
+            closeBtn.addEventListener('click', closeLightbox);
+
+            // 点背景关闭，点图片不关闭
+            lightbox.addEventListener('click', function (event) {
+                if (event.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+
+            document.addEventListener('keydown', onLightboxKey);
+        };
+
+        // 标记独立大图并绑定点击放大
+        contentArea.querySelectorAll('img').forEach(function (img) {
+            if (!isStandaloneImage(img)) {
+                return;
+            }
+
+            img.classList.add('is-figure');
+
+            img.addEventListener('click', function () {
+                openLightbox(img.currentSrc || img.src, img.alt);
+            });
+        });
+    }
+
     /* ---------- 返回顶部 ---------- */
     var backTop = document.querySelector('[data-back-top]');
 
