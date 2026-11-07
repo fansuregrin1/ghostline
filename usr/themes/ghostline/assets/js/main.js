@@ -8,27 +8,55 @@
     var root = document.documentElement;
     var STORAGE_KEY = 'ghostline-theme';
 
-    /* ---------- 主题切换 ---------- */
-    function currentTheme() {
-        var saved = root.getAttribute('data-theme');
-        if (saved) {
-            return saved;
-        }
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    /* ---------- 主题切换（浅色 → 深色 → 跟随系统） ---------- */
+    var systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+    /** 当前模式：light | dark | auto */
+    function currentMode() {
+        try {
+            var saved = localStorage.getItem(STORAGE_KEY);
+            if (saved === 'light' || saved === 'dark' || saved === 'auto') {
+                return saved;
+            }
+        } catch (e) {}
+        return 'auto';
     }
 
-    function applyTheme(theme) {
-        root.setAttribute('data-theme', theme);
+    /** 把模式同步到 <html data-theme> 与按钮状态 */
+    function applyMode(mode) {
+        if (mode === 'auto') {
+            root.removeAttribute('data-theme');
+        } else {
+            root.setAttribute('data-theme', mode);
+        }
+
         try {
-            localStorage.setItem(STORAGE_KEY, theme);
+            localStorage.setItem(STORAGE_KEY, mode);
         } catch (e) {}
+
+        var labels = {
+            light: '当前：浅色，点击切换到深色',
+            dark: '当前：深色，点击切换到跟随系统',
+            auto: '当前：跟随系统，点击切换到浅色'
+        };
+
+        document.querySelectorAll('[data-theme-toggle]').forEach(function (button) {
+            button.setAttribute('data-mode', mode);
+            button.setAttribute('aria-label', labels[mode] || '切换配色');
+            button.setAttribute('title', labels[mode] || '切换配色');
+        });
     }
 
     document.querySelectorAll('[data-theme-toggle]').forEach(function (button) {
         button.addEventListener('click', function () {
-            applyTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+            var order = ['light', 'dark', 'auto'];
+            var next = order[(order.indexOf(currentMode()) + 1) % order.length];
+            applyMode(next);
         });
     });
+
+    // 初始化按钮状态
+    applyMode(currentMode());
 
     /* ---------- 代码块：语法高亮 + 行号 + 复制 ---------- */
     document.querySelectorAll('[data-post-content] pre').forEach(function (pre) {
@@ -918,13 +946,10 @@
         });
     }
 
-    /* ---------- 跟随系统（未手动选择时） ---------- */
-    var media = window.matchMedia('(prefers-color-scheme: dark)');
-    media.addEventListener('change', function () {
-        try {
-            if (!localStorage.getItem(STORAGE_KEY)) {
-                root.removeAttribute('data-theme');
-            }
-        } catch (e) {}
+    /* ---------- 系统配色变化时，auto 模式下自动跟随 ---------- */
+    systemDark.addEventListener('change', function () {
+        if (currentMode() === 'auto') {
+            root.removeAttribute('data-theme');
+        }
     });
 })();

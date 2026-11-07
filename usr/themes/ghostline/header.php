@@ -30,6 +30,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
 
     <script>
         // 在首屏渲染前应用已保存的配色偏好，避免闪烁
+        // light / dark 时固定主题；auto 或未设置时交给 prefers-color-scheme
         (function () {
             try {
                 var saved = localStorage.getItem('ghostline-theme');
@@ -76,13 +77,17 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
             </button>
 
             <button class="icon-button theme-toggle" type="button" aria-label="<?php _e('切换配色'); ?>"
-                    data-theme-toggle>
+                    title="<?php _e('浅色 / 深色 / 跟随系统'); ?>" data-theme-toggle>
                 <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
                     <circle cx="12" cy="12" r="4"></circle>
                     <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
                 </svg>
                 <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+                </svg>
+                <svg class="icon-auto" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="2.5" y="4" width="19" height="13" rx="2"></rect>
+                    <path d="M8.5 20.5h7M12 17v3.5"></path>
                 </svg>
             </button>
         </nav>
