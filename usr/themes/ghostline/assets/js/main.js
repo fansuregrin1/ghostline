@@ -921,10 +921,7 @@
             .map(function (v) { return v.trim(); })
             .filter(Boolean);
 
-        // 顶层评论按顺序编号，子评论用「父楼层-序号」
-        var topIndex = 0;
-        var childCounters = {};
-
+        // 顶层评论按顺序遍历，子评论递归处理
         var getAuthorName = function (li) {
             var cite = li.querySelector(':scope > .comment-author .fn');
             return cite ? cite.textContent.trim() : '';
@@ -937,27 +934,6 @@
 
             items.forEach(function (li) {
                 var authorBox = li.querySelector(':scope > .comment-author');
-
-                // 楼层号：顶层递增，子评论用 父楼层-序号 表示
-                var floor;
-                if (!parentLi) {
-                    topIndex += 1;
-                    floor = String(topIndex);
-                    childCounters[floor] = 0;
-                } else {
-                    var parentFloor = parentLi.dataset.floor || '1';
-                    childCounters[parentFloor] = (childCounters[parentFloor] || 0) + 1;
-                    floor = parentFloor + '-' + childCounters[parentFloor];
-                }
-
-                li.dataset.floor = floor;
-
-                if (authorBox && floor) {
-                    var badge = document.createElement('span');
-                    badge.className = 'comment-floor';
-                    badge.textContent = '#' + floor;
-                    authorBox.appendChild(badge);
-                }
 
                 // 博主徽章：紧跟在昵称后面
                 var coid = (li.id || '').replace('comment-', '');

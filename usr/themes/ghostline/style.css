@@ -1234,14 +1234,6 @@ button {
     gap: 0.5rem;
 }
 
-/* 楼层号 */
-.comment-floor {
-    color: var(--text-faint);
-    font-size: 0.75rem;
-    font-variant-numeric: tabular-nums;
-    margin-left: auto;
-}
-
 /* 博主徽章 */
 .comment-owner {
     padding: 0.05rem 0.4rem;
