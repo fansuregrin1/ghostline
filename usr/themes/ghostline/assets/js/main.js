@@ -1010,6 +1010,77 @@
         }
     })();
 
+    /* ---------- 评论表情面板 ---------- */
+    (function () {
+        var toggle = document.querySelector('[data-emoji-toggle]');
+        var panel = document.querySelector('[data-emoji-panel]');
+        var input = document.querySelector('[data-comment-input]');
+
+        if (!toggle || !panel || !input) {
+            return;
+        }
+
+        var openPanel = function () {
+            panel.hidden = false;
+            toggle.setAttribute('aria-expanded', 'true');
+        };
+
+        var closePanel = function () {
+            panel.hidden = true;
+            toggle.setAttribute('aria-expanded', 'false');
+        };
+
+        toggle.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            if (panel.hidden) {
+                openPanel();
+            } else {
+                closePanel();
+            }
+        });
+
+        // 点击面板外关闭
+        document.addEventListener('click', function (event) {
+            if (panel.hidden) {
+                return;
+            }
+
+            if (!panel.contains(event.target) && !toggle.contains(event.target)) {
+                closePanel();
+            }
+        });
+
+        // 插入表情到光标位置
+        panel.addEventListener('click', function (event) {
+            var btn = event.target.closest('[data-emoji]');
+
+            if (!btn) {
+                return;
+            }
+
+            event.preventDefault();
+
+            var emoji = btn.getAttribute('data-emoji');
+            var start = input.selectionStart || 0;
+            var end = input.selectionEnd || 0;
+            var value = input.value;
+
+            input.value = value.slice(0, start) + emoji + value.slice(end);
+
+            var pos = start + emoji.length;
+            input.setSelectionRange(pos, pos);
+            input.focus();
+        });
+
+        // Esc 关闭
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && !panel.hidden) {
+                closePanel();
+            }
+        });
+    })();
+
     /* ---------- 阅读进度条 ---------- */
     var progress = document.querySelector('[data-reading-progress]');
     var progressBar = document.querySelector('[data-reading-progress-bar]');

@@ -100,10 +100,31 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
 
                 <div class="form-row">
                     <label for="textarea"><?php _e('评论内容'); ?></label>
-                    <textarea rows="6" name="text" id="textarea" required><?php $this->remember('text'); ?></textarea>
+                    <textarea rows="6" name="text" id="textarea" required data-comment-input><?php $this->remember('text'); ?></textarea>
+                </div>
+
+                <?php $emojiSet = ghostline_comment_emoji(); ?>
+                <div class="emoji-panel" data-emoji-panel hidden>
+                    <div class="emoji-grid">
+                        <?php foreach ($emojiSet as $name => $char): ?>
+                            <button type="button" class="emoji-btn"
+                                    data-emoji="<?php echo htmlspecialchars($char, ENT_QUOTES, 'UTF-8'); ?>"
+                                    title="<?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?>">
+                                <?php echo htmlspecialchars($char, ENT_QUOTES, 'UTF-8'); ?>
+                            </button>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
 
                 <div class="form-actions">
+                    <button type="button" class="emoji-toggle" data-emoji-toggle
+                            aria-expanded="false" aria-label="<?php _e('插入表情'); ?>">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M8.5 14.5a4 4 0 0 0 7 0M9 9.5h.01M15 9.5h.01"></path>
+                        </svg>
+                    </button>
+
                     <button type="submit" class="button-primary"><?php _e('提交评论'); ?></button>
                 </div>
             </form>

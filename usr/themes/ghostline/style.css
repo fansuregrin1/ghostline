@@ -1336,7 +1336,9 @@ button {
 
 .form-actions {
     display: flex;
+    align-items: center;
     justify-content: flex-end;
+    gap: 0.6rem;
 }
 
 .button-primary {
@@ -2569,6 +2571,82 @@ body.lightbox-open {
     .post-content h4 {
         page-break-after: avoid;
     }
+}
+
+/* ---------- 评论表情面板 ---------- */
+.emoji-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    color: var(--text-faint);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: color 0.15s var(--ease), border-color 0.15s var(--ease),
+        background-color 0.15s var(--ease);
+}
+
+.emoji-toggle:hover,
+.emoji-toggle[aria-expanded="true"] {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.emoji-toggle svg {
+    width: 1.15rem;
+    height: 1.15rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+}
+
+.emoji-panel {
+    padding: 0.75rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.emoji-panel[hidden] {
+    display: none;
+}
+
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(2.15rem, 1fr));
+    gap: 0.25rem;
+}
+
+.emoji-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 0;
+    font-size: 1.15rem;
+    line-height: 1;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.12s var(--ease), border-color 0.12s var(--ease),
+        transform 0.12s var(--ease);
+}
+
+.emoji-btn:hover {
+    background: var(--bg-soft);
+    border-color: var(--border);
+    transform: scale(1.12);
+}
+
+.emoji-btn:active {
+    transform: scale(0.96);
 }
 
 /* ---------- 响应式 ---------- */

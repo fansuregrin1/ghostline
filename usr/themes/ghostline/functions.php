@@ -19,4 +19,5 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
 
 require_once __DIR__ . '/includes/helpers.php';
 require_once __DIR__ . '/includes/color.php';
+require_once __DIR__ . '/includes/emoji.php';
 require_once __DIR__ . '/includes/config.php';
