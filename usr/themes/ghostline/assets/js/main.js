@@ -101,7 +101,7 @@
         pre.appendChild(button);
     });
 
-    /* ---------- 文章目录 ---------- */
+    /* ---------- 文章目录（嵌套树，可折叠） ---------- */
     var toc = document.querySelector('[data-toc]');
     var tocList = document.querySelector('[data-toc-list]');
     var article = document.querySelector('[data-post-content]');
@@ -111,7 +111,8 @@
         var headings = article.querySelectorAll('h2, h3, h4');
 
         if (headings.length >= 2) {
-            var tocLinks = [];
+            var tocItems = [];      // 与 headings 一一对应的 <li>
+            var stack = [];         // 用于构建层级：{ level, list }
 
             headings.forEach(function (heading, index) {
                 if (!heading.id) {
@@ -120,24 +121,68 @@
 
                 var level = Number(heading.tagName.charAt(1));
                 var item = document.createElement('li');
-                var link = document.createElement('a');
+                item.className = 'toc-item toc-lv' + level;
 
+                var row = document.createElement('div');
+                row.className = 'toc-row';
+
+                var link = document.createElement('a');
                 link.href = '#' + heading.id;
                 link.textContent = heading.textContent;
+                row.appendChild(link);
 
-                // h2 顶格，h3 / h4 依次缩进并换用不同符号
-                if (level > 2) {
-                    item.className = 'toc-lv' + level;
+                item.appendChild(row);
+
+                // 找到合适的父级：上一个 level 更小的条目
+                while (stack.length && stack[stack.length - 1].level >= level) {
+                    stack.pop();
                 }
 
-                item.appendChild(link);
-                tocList.appendChild(item);
-                tocLinks.push(item);
+                if (stack.length === 0) {
+                    tocList.appendChild(item);
+                } else {
+                    var parent = stack[stack.length - 1];
+
+                    if (!parent.subList) {
+                        parent.subList = document.createElement('ul');
+                        parent.subList.className = 'toc-sublist';
+                        parent.item.appendChild(parent.subList);
+                        parent.item.classList.add('has-children');
+                    }
+
+                    parent.subList.appendChild(item);
+                }
+
+                var entry = { level: level, item: item, list: null };
+                stack.push(entry);
+                tocItems.push(item);
+            });
+
+            // 为带子项的条目添加折叠按钮
+            tocItems.forEach(function (item) {
+                if (!item.classList.contains('has-children')) {
+                    return;
+                }
+
+                var button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'toc-toggle';
+                button.setAttribute('aria-label', '折叠子目录');
+                button.setAttribute('aria-expanded', 'true');
+
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    var collapsed = item.classList.toggle('is-collapsed');
+                    button.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+                    button.setAttribute('aria-label', collapsed ? '展开子目录' : '折叠子目录');
+                });
+
+                item.querySelector('.toc-row').insertBefore(button, item.querySelector('.toc-row').firstChild);
             });
 
             toc.hidden = false;
 
-            /* 滚动时高亮当前所在章节 */
+            /* 滚动时高亮当前所在章节，并展开其祖先 */
             var currentIndex = -1;
 
             var setCurrent = function (index) {
@@ -145,12 +190,28 @@
                     return;
                 }
 
-                if (tocLinks[currentIndex]) {
-                    tocLinks[currentIndex].classList.remove('is-current');
+                if (tocItems[currentIndex]) {
+                    tocItems[currentIndex].classList.remove('is-current');
                 }
 
-                if (tocLinks[index]) {
-                    tocLinks[index].classList.add('is-current');
+                var item = tocItems[index];
+
+                if (item) {
+                    item.classList.add('is-current');
+
+                    // 确保当前项所在的父级都是展开的
+                    var parent = item.parentElement;
+
+                    while (parent && parent !== tocList) {
+                        if (parent.classList.contains('toc-item') && parent.classList.contains('is-collapsed')) {
+                            parent.classList.remove('is-collapsed');
+                            var toggle = parent.querySelector(':scope > .toc-row > .toc-toggle');
+                            if (toggle) {
+                                toggle.setAttribute('aria-expanded', 'true');
+                            }
+                        }
+                        parent = parent.parentElement;
+                    }
                 }
 
                 currentIndex = index;
