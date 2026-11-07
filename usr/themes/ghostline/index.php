@@ -39,33 +39,43 @@ $isHome = $this->is('index');
         <?php if ($this->have()): ?>
             <div class="post-list">
                 <?php while ($this->next()): ?>
-                    <article class="post-card">
-                        <h2 class="post-card-title">
-                            <a href="<?php $this->permalink(); ?>"><?php $this->title(); ?></a>
-                        </h2>
+                    <?php $cover = ghostline_cover($this); ?>
+                    <article class="post-card<?php echo $cover ? ' has-cover' : ''; ?>">
+                        <?php if ($cover): ?>
+                            <a class="post-card-cover" href="<?php $this->permalink(); ?>" tabindex="-1" aria-hidden="true">
+                                <img src="<?php echo htmlspecialchars($cover, ENT_QUOTES, 'UTF-8'); ?>"
+                                     alt="" loading="lazy" decoding="async">
+                            </a>
+                        <?php endif; ?>
 
-                        <p class="post-card-excerpt"><?php echo ghostline_excerpt($this); ?></p>
+                        <div class="post-card-body">
+                            <h2 class="post-card-title">
+                                <a href="<?php $this->permalink(); ?>"><?php $this->title(); ?></a>
+                            </h2>
 
-                        <footer class="post-card-meta">
-                            <time datetime="<?php $this->date('c'); ?>"><?php $this->date('Y-m-d'); ?></time>
+                            <p class="post-card-excerpt"><?php echo ghostline_excerpt($this); ?></p>
 
-                            <?php if ($this->category): ?>
-                                <span class="meta-sep" aria-hidden="true">·</span>
-                                <span class="meta-category"><?php $this->category(','); ?></span>
-                            <?php endif; ?>
+                            <footer class="post-card-meta">
+                                <time datetime="<?php $this->date('c'); ?>"><?php $this->date('Y-m-d'); ?></time>
 
-                            <?php if (ghostline_enabled('showReading')): ?>
-                                <span class="meta-sep" aria-hidden="true">·</span>
-                                <span><?php echo ghostline_reading_time((string) $this->text); ?> <?php _e('分钟'); ?></span>
-                            <?php endif; ?>
+                                <?php if ($this->category): ?>
+                                    <span class="meta-sep" aria-hidden="true">·</span>
+                                    <span class="meta-category"><?php $this->category(','); ?></span>
+                                <?php endif; ?>
 
-                            <?php if ($this->commentsNum > 0): ?>
-                                <span class="meta-sep" aria-hidden="true">·</span>
-                                <a class="meta-comments" href="<?php $this->permalink(); ?>#comments">
-                                    <?php $this->commentsNum(_t('0 条评论'), _t('1 条评论'), _t('%d 条评论')); ?>
-                                </a>
-                            <?php endif; ?>
-                        </footer>
+                                <?php if (ghostline_enabled('showReading')): ?>
+                                    <span class="meta-sep" aria-hidden="true">·</span>
+                                    <span><?php echo ghostline_reading_time((string) $this->text); ?> <?php _e('分钟'); ?></span>
+                                <?php endif; ?>
+
+                                <?php if ($this->commentsNum > 0): ?>
+                                    <span class="meta-sep" aria-hidden="true">·</span>
+                                    <a class="meta-comments" href="<?php $this->permalink(); ?>#comments">
+                                        <?php $this->commentsNum(_t('0 条评论'), _t('1 条评论'), _t('%d 条评论')); ?>
+                                    </a>
+                                <?php endif; ?>
+                            </footer>
+                        </div>
                     </article>
                 <?php endwhile; ?>
             </div>

@@ -6,8 +6,8 @@
  *
  * @package Ghostline
  * @author Ghostline
- * @version 0.1.0
- * @link https://github.com/
+ * @version 0.2.0
+ * @link https://github.com/typecho-themes/ghostline
  */
 
 if (!defined('__TYPECHO_ROOT_DIR__')) {
@@ -52,11 +52,70 @@ function themeConfig($form)
                 'showBackTop'  => _t('显示返回顶部按钮'),
                 'showPrevNext' => _t('显示上一篇 / 下一篇'),
                 'showComments' => _t('开放评论区'),
+                'showCover'    => _t('在列表页显示文章封面图'),
             ],
-            ['showSidebar', 'showToc', 'showReading', 'showBackTop', 'showPrevNext', 'showComments'],
+            ['showSidebar', 'showToc', 'showReading', 'showBackTop', 'showPrevNext', 'showComments', 'showCover'],
             _t('功能开关')
         )->multiMode()
     );
+}
+
+/**
+ * 文章编辑页的「自定义字段」
+ *
+ * 目前提供一个封面图地址，用于在列表页展示缩略图。
+ *
+ * @param \Typecho\Widget\Helper\Layout $layout
+ * @return void
+ */
+function themeFields($layout)
+{
+    $cover = new \Typecho\Widget\Helper\Form\Element\Text(
+        'cover',
+        null,
+        null,
+        _t('封面图地址'),
+        _t('填入图片 URL，会显示在列表页。留空则使用纯文字样式'),
+        _t('显示在文章列表中的缩略图')
+    );
+
+    $cover->setAttribute('class', 'text w-100');
+
+    $layout->addItem($cover);
+}
+
+/**
+ * 读取文章封面图地址
+ *
+ * @param \Widget\Archive $archive
+ * @return string 没有封面图时返回空字符串
+ */
+function ghostline_cover(\Widget\Archive $archive): string
+{
+    if (!ghostline_enabled('showCover')) {
+        return '';
+    }
+
+    $cover = '';
+
+    try {
+        if (isset($archive->fields->cover) && is_string($archive->fields->cover)) {
+            $cover = trim($archive->fields->cover);
+        }
+    } catch (\Throwable $e) {
+        return '';
+    }
+
+    if ($cover === '') {
+        return '';
+    }
+
+    // 只接受 http(s)、协议相对地址，或站内绝对路径
+    if (!preg_match('#^(https?:)?//#i', $cover) && strpos($cover, '/') !== 0) {
+        return '';
+    }
+
+    return $cover;
 }
 
 /**
@@ -102,6 +161,7 @@ function themeInit($options = null)
             'showBackTop',
             'showPrevNext',
             'showComments',
+            'showCover',
         ],
     ];
 
