@@ -40,13 +40,13 @@ function themeConfig($form)
         new \Typecho\Widget\Helper\Form\Element\Select(
             'homeLayout',
             [
-                'card'      => _t('卡片式（含封面图）'),
-                'compact'   => _t('紧凑列表（仅标题与日期）'),
-                'classic'   => _t('经典式（标题 + 摘要）'),
+                'card'    => _t('卡片式'),
+                'classic' => _t('经典式'),
+                'compact' => _t('紧凑式'),
             ],
             'card',
             _t('首页文章列表样式'),
-            _t('卡片式会显示封面图；经典式与之前的样式一致')
+            _t('卡片式：带封面图，左图右文；经典式：纯文字，含标题与摘要；紧凑式：仅标题与日期')
         )
     );
 

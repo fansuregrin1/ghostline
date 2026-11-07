@@ -42,7 +42,7 @@ $isHome = $this->is('index');
                 <?php while ($this->next()): ?>
                     <?php
                     $cover = ghostline_cover($this);
-                    $showCover = $cover && $homeLayout !== 'compact';
+                    $showCover = $cover && $homeLayout === 'card';
                     ?>
                     <?php if ($homeLayout === 'compact'): ?>
                         <article class="post-row">
