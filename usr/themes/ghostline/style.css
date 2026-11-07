@@ -1327,6 +1327,107 @@ body.search-open {
     overflow: hidden;
 }
 
+.search-results {
+    max-height: min(52vh, 26rem);
+    overflow-y: auto;
+    border-top: 1px solid var(--border);
+}
+
+.search-results[hidden] {
+    display: none;
+}
+
+.search-result-item {
+    display: block;
+    padding: 0.7rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background-color 0.12s var(--ease);
+}
+
+.search-result-item:last-child {
+    border-bottom: 0;
+}
+
+.search-result-item:hover,
+.search-result-item.is-active {
+    background: var(--bg-soft);
+    opacity: 1;
+}
+
+.search-result-title {
+    display: block;
+    font-size: 0.9375rem;
+    font-weight: 550;
+    line-height: 1.45;
+    color: var(--text);
+}
+
+.search-result-item.is-active .search-result-title {
+    color: var(--accent);
+}
+
+.search-result-title mark {
+    padding: 0 0.1em;
+    color: inherit;
+    background: color-mix(in srgb, var(--accent) 22%, transparent);
+    border-radius: 3px;
+}
+
+.search-result-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.2rem;
+    color: var(--text-faint);
+    font-size: 0.75rem;
+}
+
+.search-result-meta .meta-sep {
+    color: var(--border-strong);
+}
+
+.search-result-excerpt {
+    margin-top: 0.25rem;
+    color: var(--text-soft);
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.search-result-empty {
+    padding: 1.4rem 0.9rem;
+    color: var(--text-faint);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.search-results-footer {
+    border-top: 1px solid var(--border);
+}
+
+.search-results-footer[hidden] {
+    display: none;
+}
+
+.search-result-all {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    padding: 0.6rem 0.9rem;
+    color: var(--accent);
+    font-size: 0.8125rem;
+    background: var(--bg-soft);
+}
+
+.search-result-all:hover {
+    opacity: 0.85;
+}
+
 /* ---------- 响应式 ---------- */
 @media (max-width: 900px) {
     .layout.has-sidebar {

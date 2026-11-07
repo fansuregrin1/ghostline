@@ -84,7 +84,8 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
 </header>
 
 <dialog class="search-dialog" id="search-dialog" aria-label="<?php _e('搜索'); ?>" data-search-dialog>
-    <form class="search-dialog-form" method="post" action="<?php $this->options->siteUrl(); ?>" role="search">
+    <form class="search-dialog-form" method="post" action="<?php $this->options->siteUrl(); ?>" role="search"
+          data-search-form data-api="<?php $this->options->themeUrl('search-api.php'); ?>">
         <div class="search-dialog-field">
             <svg class="search-dialog-icon" viewBox="0 0 24 24" aria-hidden="true">
                 <circle cx="11" cy="11" r="7"></circle>
@@ -92,7 +93,9 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
             </svg>
             <label class="sr-only" for="search-dialog-input"><?php _e('搜索关键字'); ?></label>
             <input id="search-dialog-input" type="search" name="s" autocomplete="off"
-                   placeholder="<?php _e('搜索文章…'); ?>" required data-search-input>
+                   placeholder="<?php _e('搜索文章…'); ?>" required data-search-input
+                   role="combobox" aria-expanded="false" aria-controls="search-results"
+                   aria-autocomplete="list">
             <button type="button" class="search-dialog-close" aria-label="<?php _e('关闭搜索'); ?>"
                     data-search-close>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -100,9 +103,16 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
                 </svg>
             </button>
         </div>
+
+        <div class="search-results" id="search-results" role="listbox"
+             aria-label="<?php _e('搜索结果'); ?>" data-search-results hidden></div>
+
+        <div class="search-results-footer" data-search-footer hidden></div>
+
         <div class="search-dialog-hint">
-            <span><?php _e('按 Enter 搜索'); ?></span>
+            <span data-search-hint-text><?php _e('输入关键词开始搜索'); ?></span>
             <span class="search-dialog-kbd">
+                <kbd>↑</kbd><kbd>↓</kbd> <?php _e('选择'); ?>
                 <kbd>Esc</kbd> <?php _e('关闭'); ?>
             </span>
         </div>
