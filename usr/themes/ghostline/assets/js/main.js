@@ -1165,6 +1165,95 @@
         });
     })();
 
+    /* ---------- 数学公式（KaTeX，按需加载） ---------- */
+    (function () {
+        var content = document.querySelector('[data-post-content]');
+
+        if (!content) {
+            return;
+        }
+
+        var MATH_PATTERN = /\$\$[\s\S]+?\$\$|\$[^$\n]+?\$|\\\([\s\S]+?\\\)|\\\[[\s\S]+?\\\]/;
+
+        // 先排除代码块内容再判断，避免代码里的 $ 误触发加载
+        var probe = content.cloneNode(true);
+
+        probe.querySelectorAll('pre, code, script, style, textarea').forEach(function (el) {
+            el.parentNode.removeChild(el);
+        });
+
+        if (!MATH_PATTERN.test(probe.textContent || '')) {
+            return;
+        }
+
+        // 定位 vendor 目录：从当前 script 的 src 推导，退化为相对路径
+        var selfSrc = '';
+        var scripts = document.querySelectorAll('script[src*="main.js"]');
+
+        if (scripts.length) {
+            selfSrc = scripts[scripts.length - 1].src;
+        }
+
+        var vendorBase = selfSrc.replace(/assets\/js\/main\.js.*$/, 'assets/vendor/katex/');
+
+        if (!/vendor\/katex\/$/.test(vendorBase)) {
+            vendorBase = '/usr/themes/ghostline/assets/vendor/katex/';
+        }
+
+        var loadCss = function (href) {
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href;
+            document.head.appendChild(link);
+        };
+
+        var loadScript = function (src) {
+            return new Promise(function (resolve, reject) {
+                var s = document.createElement('script');
+                s.src = src;
+                s.async = true;
+                s.onload = resolve;
+                s.onerror = reject;
+                document.head.appendChild(s);
+            });
+        };
+
+        loadCss(vendorBase + 'katex.min.css');
+
+        var chain = loadScript(vendorBase + 'katex.min.js')
+            .then(function () {
+                // 化学式扩展（可选，失败不影响普通公式）
+                return loadScript(vendorBase + 'mhchem.min.js').catch(function () {});
+            })
+            .then(function () {
+                return loadScript(vendorBase + 'auto-render.min.js');
+            })
+            .then(function () {
+                if (typeof window.renderMathInElement !== 'function') {
+                    return;
+                }
+
+                try {
+                    window.renderMathInElement(content, {
+                        delimiters: [
+                            { left: '$$', right: '$$', display: true },
+                            { left: '\\[', right: '\\]', display: true },
+                            { left: '$', right: '$', display: false },
+                            { left: '\\(', right: '\\)', display: false },
+                        ],
+                        ignoredTags: ['pre', 'code', 'script', 'style', 'textarea', 'a'],
+                        throwOnError: false,
+                        errorColor: '#e11d48',
+                    });
+
+                    content.classList.add('has-math');
+                } catch (e) {}
+            })
+            .catch(function () {});
+
+        return chain;
+    })();
+
     /* ---------- 阅读进度条 ---------- */
     var progress = document.querySelector('[data-reading-progress]');
     var progressBar = document.querySelector('[data-reading-progress-bar]');

@@ -2695,6 +2695,48 @@ body.lightbox-open {
     transform: scale(0.96);
 }
 
+/* ---------- 数学公式（KaTeX） ---------- */
+.post-content .katex {
+    /* 跟随正文颜色，自动适配明暗模式 */
+    color: inherit;
+    font-size: 1.05em;
+}
+
+.post-content .katex-display {
+    margin: 1.4em 0;
+    padding: 0.4em 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* 超宽公式横向滚动，不撑破布局 */
+.post-content .katex-display > .katex {
+    white-space: normal;
+}
+
+.post-content .katex-display::-webkit-scrollbar {
+    height: 6px;
+}
+
+.post-content .katex-display::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 3px;
+}
+
+/* 渲染失败时的错误提示 */
+.post-content .katex-error {
+    color: #e11d48;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+}
+
+/* 打印时公式不参与换行 */
+@media print {
+    .post-content .katex-display {
+        overflow: visible;
+    }
+}
+
 /* ---------- 响应式 ---------- */
 @media (max-width: 900px) {
     .layout.has-sidebar {
