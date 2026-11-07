@@ -230,15 +230,22 @@ function themeConfig($form)
         ))->addRule('url', _t('请填写合法的 URL 地址'))
     );
 
-    $form->addInput(
-        (new \Typecho\Widget\Helper\Form\Element\Text(
-            'socialLinks',
-            null,
-            null,
-            _t('社交链接'),
-            _t('每行一个，格式：名称|地址，例如：GitHub|https://github.com/your-name')
-        ))
+    $socialField = new \Typecho\Widget\Helper\Form\Element\Textarea(
+        'socialLinks',
+        null,
+        null,
+        _t('社交链接'),
+        _t('每行一个，格式：名称|地址。例如：<br>GitHub|https://github.com/your-name<br>微博|https://weibo.com/your-name')
     );
+
+    $form->addInput($socialField);
+
+    // 属性要设在内部的 textarea 元素上，而不是外层容器
+    if ($socialField->input instanceof \Typecho\Widget\Helper\Layout) {
+        $socialField->input->setAttribute('rows', 4);
+        $socialField->input->setAttribute('class', 'text w-100');
+        $socialField->input->setAttribute('style', 'resize:vertical;min-height:96px;');
+    }
 
     /* ---------------- 页脚 ---------------- */
 
