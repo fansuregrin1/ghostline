@@ -1198,17 +1198,79 @@ button {
     font-size: 0.8125rem;
 }
 
-.comment-list .children {
+.comment-list .comment-children {
     margin: 0.5rem 0 0;
-    padding-left: 1.25rem;
-    list-style: none;
+    padding-left: 1.15rem;
     border-left: 2px solid var(--border);
+}
+
+.comment-list .comment-children .comment-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* 第 3 层起不再增加缩进，避免窄屏过度挤压 */
+.comment-list .comment-children .comment-children .comment-children {
+    margin-left: -0.95rem;
+    padding-left: 0;
+    border-left: 0;
+}
+
+/* 第 4 层及更深的子评论，用背景色区分而非缩进 */
+.comment-list .comment-children .comment-children .comment-children .comment-list > .comment-body,
+.comment-list .comment-children .comment-children .comment-children .comment-list > .comment-body .comment-content {
+    padding-left: 0;
 }
 
 .comment-list .comment-body .comment-author {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.5rem;
+}
+
+/* 楼层号 */
+.comment-floor {
+    color: var(--text-faint);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    margin-left: auto;
+}
+
+/* 博主徽章 */
+.comment-owner {
+    padding: 0.05rem 0.4rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--accent);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+/* 回复对象提示 */
+.comment-reply-to {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    margin-bottom: 0.35rem;
+    color: var(--text-faint);
+    font-size: 0.75rem;
+}
+
+.comment-reply-to b {
+    color: var(--text-soft);
+    font-weight: 550;
+}
+
+/* 子评论的卡片化，让层级更清晰 */
+.comment-list .comment-children > .comment-list > .comment-body {
+    padding-left: 0.75rem;
+}
+
+.comment-list .comment-children > .comment-list > .comment-body + .comment-body {
+    margin-top: 0.35rem;
 }
 
 .comment-list .comment-body .comment-author .avatar {

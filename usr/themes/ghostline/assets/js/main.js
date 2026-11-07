@@ -908,6 +908,108 @@
         });
     }
 
+    /* ---------- 评论增强：楼层号 / 回复提示 / 博主徽章 ---------- */
+    (function () {
+        var listWrap = document.querySelector('[data-comment-list]');
+
+        if (!listWrap) {
+            return;
+        }
+
+        var ownerIds = (listWrap.getAttribute('data-owner-ids') || '')
+            .split(',')
+            .map(function (v) { return v.trim(); })
+            .filter(Boolean);
+
+        // 顶层评论按顺序编号，子评论用「父楼层-序号」
+        var topIndex = 0;
+        var childCounters = {};
+
+        var getAuthorName = function (li) {
+            var cite = li.querySelector(':scope > .comment-author .fn');
+            return cite ? cite.textContent.trim() : '';
+        };
+
+        var walk = function (list, parentLi) {
+            var items = Array.prototype.filter.call(list.children, function (el) {
+                return el.tagName === 'LI' && el.classList.contains('comment-body');
+            });
+
+            items.forEach(function (li) {
+                var authorBox = li.querySelector(':scope > .comment-author');
+
+                // 楼层号：顶层递增，子评论用 父楼层-序号 表示
+                var floor;
+                if (!parentLi) {
+                    topIndex += 1;
+                    floor = String(topIndex);
+                    childCounters[floor] = 0;
+                } else {
+                    var parentFloor = parentLi.dataset.floor || '1';
+                    childCounters[parentFloor] = (childCounters[parentFloor] || 0) + 1;
+                    floor = parentFloor + '-' + childCounters[parentFloor];
+                }
+
+                li.dataset.floor = floor;
+
+                if (authorBox && floor) {
+                    var badge = document.createElement('span');
+                    badge.className = 'comment-floor';
+                    badge.textContent = '#' + floor;
+                    authorBox.appendChild(badge);
+                }
+
+                // 博主徽章：紧跟在昵称后面
+                var coid = (li.id || '').replace('comment-', '');
+                if (ownerIds.length && coid && ownerIds.indexOf(coid) !== -1) {
+                    if (authorBox && !authorBox.querySelector('.comment-owner')) {
+                        var owner = document.createElement('span');
+                        owner.className = 'comment-owner';
+                        owner.textContent = '博主';
+                        var cite = authorBox.querySelector('.fn');
+                        if (cite && cite.nextSibling) {
+                            authorBox.insertBefore(owner, cite.nextSibling);
+                        } else {
+                            authorBox.appendChild(owner);
+                        }
+                    }
+                }
+
+                // 回复对象提示：放在内容上方独立一行
+                if (parentLi) {
+                    var parentName = getAuthorName(parentLi);
+
+                    if (parentName) {
+                        var replyTo = document.createElement('div');
+                        replyTo.className = 'comment-reply-to';
+                        replyTo.innerHTML = '<span aria-hidden="true">↳</span> 回复 <b></b>';
+                        replyTo.querySelector('b').textContent = parentName;
+
+                        var content = li.querySelector(':scope > .comment-content');
+                        if (content && content.parentNode) {
+                            content.parentNode.insertBefore(replyTo, content);
+                        }
+                    }
+                }
+
+                // 递归处理子评论
+                var childrenBox = li.querySelector(':scope > .comment-children');
+                if (childrenBox) {
+                    var childList = childrenBox.querySelector(':scope > .comment-list');
+                    if (childList) {
+                        walk(childList, li);
+                    }
+                }
+            });
+        };
+
+        // 容器的直接子元素是 <ol class="comment-list">，从它开始遍历
+        var rootList = listWrap.querySelector('.comment-list');
+        if (rootList) {
+            walk(rootList, null);
+        }
+    })();
+
     /* ---------- 阅读进度条 ---------- */
     var progress = document.querySelector('[data-reading-progress]');
     var progressBar = document.querySelector('[data-reading-progress-bar]');

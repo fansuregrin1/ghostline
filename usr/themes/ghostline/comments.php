@@ -17,11 +17,46 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
     </h2>
 
     <?php if ($comments->have()): ?>
-        <?php $comments->listComments([
-            'avatarSize' => 40,
-            'before'     => '<ol class="comment-list">',
-            'after'      => '</ol>',
-        ]); ?>
+        <?php
+        // 传给前端：用于识别「博主」评论、生成楼层号与回复提示
+        $postAuthor = $this->author;
+        $authorMails = [];
+
+        if (!empty($postAuthor->mail)) {
+            $authorMails[] = strtolower(trim((string) $postAuthor->mail));
+        }
+
+        $adminUser = \Widget\User::alloc();
+        if ($adminUser->hasLogin() && !empty($adminUser->mail)) {
+            $authorMails[] = strtolower(trim((string) $adminUser->mail));
+        }
+
+        // 查出属于博主的评论 id（按邮箱比对）
+        $ownerIds = [];
+
+        if ($authorMails) {
+            $placeholders = implode(',', array_fill(0, count($authorMails), '?'));
+            $rows = \Typecho\Db::get()->fetchAll(
+                \Typecho\Db::get()->select('coid')
+                    ->from('table.comments')
+                    ->where('cid = ?', $this->cid)
+                    ->where("LOWER(TRIM(mail)) IN ($placeholders)", ...$authorMails)
+            );
+
+            foreach ($rows as $row) {
+                $ownerIds[] = (int) $row['coid'];
+            }
+        }
+        ?>
+        <div class="comment-list-wrap"
+             data-comment-list
+             data-owner-ids="<?php echo htmlspecialchars(implode(',', $ownerIds), ENT_QUOTES, 'UTF-8'); ?>">
+            <?php $comments->listComments([
+                'avatarSize' => 40,
+                'before'     => '<ol class="comment-list">',
+                'after'      => '</ol>',
+            ]); ?>
+        </div>
 
         <nav class="pagination comment-pagination" aria-label="<?php _e('评论分页'); ?>">
             <?php $comments->pageNav('&larr; ' . _t('更早'), _t('更新') . ' &rarr;', 3); ?>
