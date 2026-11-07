@@ -131,7 +131,7 @@ $keywords = $this->request->filter('search')->get('keywords');
 
 | 选项 | 说明 |
 | --- | --- |
-| 自定义文字 | 支持 HTML，留空不显示 |
+| 页脚自定义文字 | 支持 HTML，多行输入，留空不显示 |
 | ICP 备案号 | 例如 `京ICP备12345678号` |
 | 公安备案号 | 例如 `京公网安备 11010502030143号` |
 | 版权信息 | 可隐藏「由 Typecho 驱动 · 主题 Ghostline」 |

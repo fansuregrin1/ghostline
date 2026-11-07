@@ -271,15 +271,23 @@ function themeConfig($form)
 
     ghostline_config_group($form, _t('页脚信息'), _t('版权、备案号与自定义文字'));
 
-    $form->addInput(
-        (new \Typecho\Widget\Helper\Form\Element\Text(
-            'footerText',
-            null,
-            null,
-            _t('页脚自定义文字'),
-            _t('显示在页脚版权信息下方，支持 HTML，留空则不显示')
-        ))->addRule('maxLength', _t('文字过长'), 240)
+    $footerField = new \Typecho\Widget\Helper\Form\Element\Textarea(
+        'footerText',
+        null,
+        null,
+        _t('页脚自定义文字'),
+        _t('显示在页脚版权信息下方，支持 HTML，可换行书写。留空则不显示')
     );
+
+    $form->addInput($footerField);
+
+    if ($footerField->input instanceof \Typecho\Widget\Helper\Layout) {
+        $footerField->input->setAttribute('rows', 3);
+        $footerField->input->setAttribute('class', 'text w-100');
+        $footerField->input->setAttribute('style', 'resize:vertical;min-height:72px;');
+    }
+
+    $footerField->addRule('maxLength', _t('内容过长，建议不超过 500 字'), 500);
 
     $form->addInput(
         (new \Typecho\Widget\Helper\Form\Element\Text(
