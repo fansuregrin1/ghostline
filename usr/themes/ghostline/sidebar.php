@@ -16,20 +16,6 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
 <aside class="sidebar" id="secondary" aria-label="<?php _e('侧边栏'); ?>">
 
     <details class="widget" open>
-        <summary class="widget-title"><?php _e('搜索'); ?></summary>
-        <form class="widget-search" method="post" action="<?php $this->options->siteUrl(); ?>" role="search">
-            <label class="sr-only" for="sidebar-search"><?php _e('搜索关键字'); ?></label>
-            <input id="sidebar-search" type="search" name="s" placeholder="<?php _e('输入关键词'); ?>" required>
-            <button type="submit" aria-label="<?php _e('搜索'); ?>">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="11" cy="11" r="7"></circle>
-                    <path d="M20 20l-3.5-3.5"></path>
-                </svg>
-            </button>
-        </form>
-    </details>
-
-    <details class="widget">
         <summary class="widget-title"><?php _e('最新文章'); ?></summary>
         <ul class="widget-list">
             <?php \Widget\Contents\Post\Recent::alloc('pageSize=5')

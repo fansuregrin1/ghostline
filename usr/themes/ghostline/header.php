@@ -61,7 +61,8 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
             <?php endwhile; ?>
 
             <button class="icon-button nav-search-toggle" type="button" aria-label="<?php _e('搜索'); ?>"
-                    aria-expanded="false" aria-controls="mobile-search" data-search-toggle>
+                    aria-haspopup="dialog" aria-expanded="false" aria-controls="search-dialog"
+                    data-search-toggle>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                     <circle cx="11" cy="11" r="7"></circle>
                     <path d="M20 20l-3.5-3.5"></path>
@@ -80,15 +81,32 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
             </button>
         </nav>
     </div>
-
-    <div class="shell mobile-search" id="mobile-search" data-search-panel hidden>
-        <form class="mobile-search-form" method="post" action="<?php $this->options->siteUrl(); ?>" role="search">
-            <label class="sr-only" for="mobile-search-input"><?php _e('搜索关键字'); ?></label>
-            <input id="mobile-search-input" type="search" name="s"
-                   placeholder="<?php _e('搜索文章…'); ?>" required>
-            <button type="submit"><?php _e('搜索'); ?></button>
-        </form>
-    </div>
 </header>
+
+<dialog class="search-dialog" id="search-dialog" aria-label="<?php _e('搜索'); ?>" data-search-dialog>
+    <form class="search-dialog-form" method="post" action="<?php $this->options->siteUrl(); ?>" role="search">
+        <div class="search-dialog-field">
+            <svg class="search-dialog-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="M20 20l-3.5-3.5"></path>
+            </svg>
+            <label class="sr-only" for="search-dialog-input"><?php _e('搜索关键字'); ?></label>
+            <input id="search-dialog-input" type="search" name="s" autocomplete="off"
+                   placeholder="<?php _e('搜索文章…'); ?>" required data-search-input>
+            <button type="button" class="search-dialog-close" aria-label="<?php _e('关闭搜索'); ?>"
+                    data-search-close>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6L6 18"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="search-dialog-hint">
+            <span><?php _e('按 Enter 搜索'); ?></span>
+            <span class="search-dialog-kbd">
+                <kbd>Esc</kbd> <?php _e('关闭'); ?>
+            </span>
+        </div>
+    </form>
+</dialog>
 
 <main id="main" class="shell site-main">

@@ -105,26 +105,91 @@
         }
     }
 
-    /* ---------- 移动端顶栏搜索 ---------- */
+    /* ---------- 搜索弹窗 ---------- */
+    var searchDialog = document.querySelector('[data-search-dialog]');
     var searchToggle = document.querySelector('[data-search-toggle]');
-    var searchPanel = document.querySelector('[data-search-panel]');
-    var searchInput = document.querySelector('#mobile-search-input');
+    var searchInput = document.querySelector('[data-search-input]');
+    var searchClose = document.querySelector('[data-search-close]');
 
-    if (searchToggle && searchPanel) {
-        searchToggle.addEventListener('click', function () {
-            var willOpen = searchPanel.hidden;
-            searchPanel.hidden = !willOpen;
-            searchToggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    if (searchDialog) {
+        var openSearch = function () {
+            if (typeof searchDialog.showModal === 'function') {
+                if (!searchDialog.open) {
+                    searchDialog.showModal();
+                }
+            } else {
+                searchDialog.setAttribute('open', '');
+            }
 
-            if (willOpen && searchInput) {
-                searchInput.focus();
+            document.body.classList.add('search-open');
+
+            if (searchToggle) {
+                searchToggle.setAttribute('aria-expanded', 'true');
+            }
+
+            // 等待浏览器完成布局再聚焦，避免移动端键盘闪一下
+            window.requestAnimationFrame(function () {
+                if (searchInput) {
+                    searchInput.focus();
+                    searchInput.select();
+                }
+            });
+        };
+
+        var closeSearch = function () {
+            if (typeof searchDialog.close === 'function' && searchDialog.open) {
+                searchDialog.close();
+            } else {
+                searchDialog.removeAttribute('open');
+            }
+
+            document.body.classList.remove('search-open');
+
+            if (searchToggle) {
+                searchToggle.setAttribute('aria-expanded', 'false');
+            }
+        };
+
+        if (searchToggle) {
+            searchToggle.addEventListener('click', openSearch);
+        }
+
+        if (searchClose) {
+            searchClose.addEventListener('click', closeSearch);
+        }
+
+        // 点击遮罩关闭
+        searchDialog.addEventListener('click', function (event) {
+            if (event.target === searchDialog) {
+                closeSearch();
             }
         });
 
-        // 提交后不需要保留展开状态
-        searchPanel.addEventListener('submit', function () {
-            searchPanel.hidden = true;
-            searchToggle.setAttribute('aria-expanded', 'false');
+        // 原生关闭（Esc 等）时同步状态
+        searchDialog.addEventListener('close', function () {
+            document.body.classList.remove('search-open');
+            if (searchToggle) {
+                searchToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Esc 兜底（部分旧浏览器 dialog 不触发 close）
+        searchDialog.addEventListener('cancel', function (event) {
+            event.preventDefault();
+            closeSearch();
+        });
+
+        // Cmd/Ctrl + K 唤起
+        document.addEventListener('keydown', function (event) {
+            var isK = String(event.key || '').toLowerCase() === 'k';
+            if (isK && (event.metaKey || event.ctrlKey) && !event.altKey) {
+                event.preventDefault();
+                if (searchDialog.open) {
+                    closeSearch();
+                } else {
+                    openSearch();
+                }
+            }
         });
     }
 
