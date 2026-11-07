@@ -386,7 +386,7 @@ function themeConfig($form)
     ghostline_config_group($form, _t('功能开关'), _t('按需开启或关闭各功能模块'));
 
     $form->addInput(
-        new \Typecho\Widget\Helper\Form\Element\Checkbox(
+        (new \Typecho\Widget\Helper\Form\Element\Checkbox(
             'features',
             [
                 'showSidebar'    => _t('在列表页显示侧栏'),
@@ -402,7 +402,7 @@ function themeConfig($form)
                 'showPrevNext', 'showComments', 'showProgress',
             ],
             _t('功能开关')
-        )->multiMode()
+        ))->multiMode()
     );
 }
 
