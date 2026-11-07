@@ -30,11 +30,36 @@
         });
     });
 
-    /* ---------- 代码复制 ---------- */
+    /* ---------- 代码块：语法高亮 + 行号 + 复制 ---------- */
     document.querySelectorAll('[data-post-content] pre').forEach(function (pre) {
         var code = pre.querySelector('code');
         if (!code) {
             return;
+        }
+
+        // Typecho 输出形如 class="lang-php"，highlight.js 可直接识别
+        if (window.hljs) {
+            try {
+                window.hljs.highlightElement(code);
+            } catch (e) {}
+        }
+
+        // 行号：优先取高亮后的行数，保证与显示一致
+        var lineCount = code.textContent.replace(/\n$/, '').split('\n').length;
+
+        if (lineCount > 1) {
+            var gutter = document.createElement('span');
+            gutter.className = 'code-lines';
+            gutter.setAttribute('aria-hidden', 'true');
+
+            var numbers = [];
+            for (var n = 1; n <= lineCount; n++) {
+                numbers.push(n);
+            }
+            gutter.textContent = numbers.join('\n');
+
+            pre.appendChild(gutter);
+            pre.classList.add('has-lines');
         }
 
         var button = document.createElement('button');

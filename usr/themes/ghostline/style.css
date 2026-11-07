@@ -756,6 +756,28 @@ button {
     tab-size: 4;
 }
 
+/* 带行号时代码区整体左移，给行号留出固定列 */
+.post-content pre.has-lines {
+    padding-left: 3.1rem;
+}
+
+.code-lines {
+    position: absolute;
+    top: 1.15rem;
+    left: 0;
+    width: 2.4rem;
+    padding-right: 0.75rem;
+    text-align: right;
+    color: #47597a;
+    font-family: var(--font-mono);
+    font-size: inherit;
+    line-height: 1.7;
+    white-space: pre;
+    user-select: none;
+    pointer-events: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+}
+
 :root[data-theme="light"] .post-content pre {
     background: #0f1626;
 }
@@ -1426,6 +1448,103 @@ body.search-open {
 
 .search-result-all:hover {
     opacity: 0.85;
+}
+
+/* ---------- 代码高亮配色（highlight.js 自定义主题） ---------- */
+.post-content pre code.hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 0;
+    background: transparent;
+}
+
+.hljs {
+    color: #dbe4f0;
+    background: transparent;
+}
+
+/* 注释 / 引用 */
+.hljs-comment,
+.hljs-quote {
+    color: #5c6f90;
+    font-style: italic;
+}
+
+/* 关键字 / 选择器 */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-doctag,
+.hljs-meta .hljs-keyword {
+    color: #7aa2f7;
+}
+
+/* 字符串 / 属性值 */
+.hljs-string,
+.hljs-regexp,
+.hljs-attribute,
+.hljs-meta .hljs-string,
+.hljs-addition {
+    color: #9ece6a;
+}
+
+/* 数字 / 常量 / 内置 */
+.hljs-number,
+.hljs-built_in,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-link {
+    color: #ff9e64;
+}
+
+/* 函数 / 类名 / 标题 */
+.hljs-title,
+.hljs-title.function_,
+.hljs-title.class_,
+.hljs-section,
+.hljs-name {
+    color: #e0af68;
+}
+
+/* 属性 / 参数 / 标签名 */
+.hljs-attr,
+.hljs-variable.language_,
+.hljs-params,
+.hljs-property {
+    color: #7dcfff;
+}
+
+/* 类型 / 命名空间 */
+.hljs-type,
+.hljs-class .hljs-title,
+.hljs-title.class_.inherited__ {
+    color: #bb9af7;
+}
+
+/* 删除 / 强调 */
+.hljs-deletion {
+    color: #f7768e;
+}
+
+.hljs-emphasis {
+    font-style: italic;
+}
+
+.hljs-strong {
+    font-weight: 700;
+}
+
+/* 元信息 / 标签 */
+.hljs-meta,
+.hljs-tag {
+    color: #8b9bb8;
+}
+
+.hljs-selector-id,
+.hljs-selector-class {
+    color: #e0af68;
 }
 
 /* ---------- 响应式 ---------- */

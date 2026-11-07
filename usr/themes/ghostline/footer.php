@@ -40,6 +40,17 @@ $options = $this->options;
     </button>
 <?php endif; ?>
 
+<?php
+/**
+ * 仅在文章 / 独立页面加载高亮库，避免其他页面无谓请求。
+ * 必须排在 main.js 之前，因为 main.js 会立即调用 window.hljs。
+ */
+$needHighlight = ($this->is('post') || $this->is('page'));
+?>
+<?php if ($needHighlight): ?>
+    <script src="<?php $options->themeUrl('assets/js/vendor/highlight.min.js'); ?>" defer></script>
+<?php endif; ?>
+
 <script src="<?php $options->themeUrl('assets/js/main.js'); ?>" defer></script>
 
 <?php $this->footer(); ?>
