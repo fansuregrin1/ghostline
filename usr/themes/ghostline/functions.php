@@ -15,6 +15,52 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
 }
 
 /**
+ * 在主题设置表单中插入分组标题
+ *
+ * @param \Typecho\Widget\Helper\Form $form
+ * @param string $title 分组名称
+ * @param string $desc 分组说明
+ * @return void
+ */
+function ghostline_config_group($form, string $title, string $desc = '')
+{
+    $wrap = new \Typecho\Widget\Helper\Layout('div');
+    $wrap->setAttribute('class', 'ghostline-group');
+    $wrap->setAttribute(
+        'style',
+        'margin:2.25rem 0 0.75rem;padding:0 0 0.6rem;'
+        . 'border-bottom:1px solid #e5e8ef;'
+    );
+
+    $heading = new \Typecho\Widget\Helper\Layout('h3');
+    $heading->setAttribute('class', 'ghostline-group-title');
+    $heading->setAttribute(
+        'style',
+        'margin:0;font-size:15px;font-weight:600;color:#1a2233;'
+        . 'display:flex;align-items:center;gap:8px;'
+    );
+    $heading->html(
+        '<span style="display:inline-block;width:3px;height:14px;'
+        . 'border-radius:2px;background:#2f6feb;"></span>'
+        . htmlspecialchars($title, ENT_QUOTES, 'UTF-8')
+    );
+    $wrap->addItem($heading);
+
+    if ($desc !== '') {
+        $note = new \Typecho\Widget\Helper\Layout('p');
+        $note->setAttribute('class', 'ghostline-group-desc');
+        $note->setAttribute(
+            'style',
+            'margin:6px 0 0;font-size:12px;line-height:1.6;color:#8a94a6;'
+        );
+        $note->html(htmlspecialchars($desc, ENT_QUOTES, 'UTF-8'));
+        $wrap->addItem($note);
+    }
+
+    $form->addItem($wrap);
+}
+
+/**
  * 后台「设置外观」表单
  *
  * @param \Typecho\Widget\Helper\Form $form
@@ -23,6 +69,8 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
 function themeConfig($form)
 {
     /* ---------------- 外观 ---------------- */
+
+    ghostline_config_group($form, _t('外观'), _t('品牌色与整体外观'));
 
     $form->addInput(
         (new \Typecho\Widget\Helper\Form\Element\Text(
@@ -35,6 +83,8 @@ function themeConfig($form)
     );
 
     /* ---------------- 布局 ---------------- */
+
+    ghostline_config_group($form, _t('列表布局'), _t('首页文章的呈现方式与信息密度'));
 
     $form->addInput(
         new \Typecho\Widget\Helper\Form\Element\Select(
@@ -71,6 +121,8 @@ function themeConfig($form)
     );
 
     /* ---------------- 排版 ---------------- */
+
+    ghostline_config_group($form, _t('正文排版'), _t('影响文章正文的字体、字号与行高'));
 
     $form->addInput(
         new \Typecho\Widget\Helper\Form\Element\Select(
@@ -115,6 +167,8 @@ function themeConfig($form)
 
     /* ---------------- 代码块 ---------------- */
 
+    ghostline_config_group($form, _t('代码块'), _t('代码高亮配色与长代码行的处理方式'));
+
     $form->addInput(
         new \Typecho\Widget\Helper\Form\Element\Select(
             'codeTheme',
@@ -143,6 +197,8 @@ function themeConfig($form)
     );
 
     /* ---------------- 个人资料 ---------------- */
+
+    ghostline_config_group($form, _t('个人资料'), _t('显示在侧栏顶部的博主卡片，全部留空则不显示'));
 
     $form->addInput(
         (new \Typecho\Widget\Helper\Form\Element\Text(
@@ -185,6 +241,8 @@ function themeConfig($form)
     );
 
     /* ---------------- 页脚 ---------------- */
+
+    ghostline_config_group($form, _t('页脚信息'), _t('版权、备案号与自定义文字'));
 
     $form->addInput(
         (new \Typecho\Widget\Helper\Form\Element\Text(
@@ -230,6 +288,8 @@ function themeConfig($form)
     );
 
     /* ---------------- 功能开关 ---------------- */
+
+    ghostline_config_group($form, _t('功能开关'), _t('按需开启或关闭各项功能模块'));
 
     $form->addInput(
         new \Typecho\Widget\Helper\Form\Element\Checkbox(
