@@ -624,6 +624,10 @@ button {
     margin-left: 0.9rem;
 }
 
+.toc-list .toc-lv4 {
+    margin-left: 1.8rem;
+}
+
 /* ---------- 正文排版 ---------- */
 .post-content {
     font-size: 1.0625rem;

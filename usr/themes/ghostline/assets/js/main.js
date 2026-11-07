@@ -107,7 +107,8 @@
     var article = document.querySelector('[data-post-content]');
 
     if (toc && tocList && article) {
-        var headings = article.querySelectorAll('h2, h3');
+        // 收录 h2 / h3 / h4 三级
+        var headings = article.querySelectorAll('h2, h3, h4');
 
         if (headings.length >= 2) {
             headings.forEach(function (heading, index) {
@@ -115,13 +116,18 @@
                     heading.id = 'heading-' + (index + 1);
                 }
 
+                var level = Number(heading.tagName.charAt(1));
                 var item = document.createElement('li');
                 var link = document.createElement('a');
+
                 link.href = '#' + heading.id;
                 link.textContent = heading.textContent;
-                if (heading.tagName === 'H3') {
-                    item.className = 'toc-lv3';
+
+                // h2 顶格，h3 / h4 依次缩进
+                if (level > 2) {
+                    item.className = 'toc-lv' + level;
                 }
+
                 item.appendChild(link);
                 tocList.appendChild(item);
             });
