@@ -775,8 +775,9 @@ button {
 
 /* ---------- 正文排版 ---------- */
 .post-content {
-    font-size: 1.0625rem;
-    line-height: 1.85;
+    font-size: var(--post-font-size, 1.0625rem);
+    line-height: var(--post-line-height, 1.85);
+    font-family: var(--post-font-family, var(--font-sans));
     color: var(--text);
     overflow-wrap: break-word;
 }
@@ -966,7 +967,8 @@ button {
     font-size: inherit;
     color: inherit;
     background: none;
-    white-space: pre;
+    white-space: var(--code-white-space, pre);
+    word-break: var(--code-word-break, normal);
 }
 
 .code-copy {
@@ -1356,6 +1358,20 @@ button {
     line-height: 1.6;
 }
 
+.footer-license {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--text-faint);
+}
+
+.footer-license a {
+    color: var(--text-faint);
+}
+
+.footer-license a:hover {
+    color: var(--accent);
+}
+
 /* ---------- 返回顶部 ---------- */
 .back-top {
     position: fixed;
@@ -1742,6 +1758,108 @@ body.search-open {
     font-weight: 700;
 }
 
+/* ---------- 备用代码配色：GitHub Dark ---------- */
+body.code-theme-github .post-content pre {
+    background: #0d1117;
+    border-color: #21262d;
+    color: #c9d1d9;
+}
+
+body.code-theme-github .hljs {
+    color: #c9d1d9;
+}
+
+body.code-theme-github .hljs-comment,
+body.code-theme-github .hljs-quote {
+    color: #8b949e;
+}
+
+body.code-theme-github .hljs-keyword,
+body.code-theme-github .hljs-selector-tag,
+body.code-theme-github .hljs-literal {
+    color: #ff7b72;
+}
+
+body.code-theme-github .hljs-string,
+body.code-theme-github .hljs-regexp,
+body.code-theme-github .hljs-addition {
+    color: #a5d6ff;
+}
+
+body.code-theme-github .hljs-number,
+body.code-theme-github .hljs-built_in,
+body.code-theme-github .hljs-symbol {
+    color: #79c0ff;
+}
+
+body.code-theme-github .hljs-title,
+body.code-theme-github .hljs-title.function_,
+body.code-theme-github .hljs-section {
+    color: #d2a8ff;
+}
+
+body.code-theme-github .hljs-attr,
+body.code-theme-github .hljs-attribute,
+body.code-theme-github .hljs-variable {
+    color: #ffa657;
+}
+
+body.code-theme-github .hljs-type,
+body.code-theme-github .hljs-class .hljs-title {
+    color: #7ee787;
+}
+
+/* ---------- 备用代码配色：Monokai ---------- */
+body.code-theme-monokai .post-content pre {
+    background: #272822;
+    border-color: #3e3d32;
+    color: #f8f8f2;
+}
+
+body.code-theme-monokai .hljs {
+    color: #f8f8f2;
+}
+
+body.code-theme-monokai .hljs-comment,
+body.code-theme-monokai .hljs-quote {
+    color: #75715e;
+}
+
+body.code-theme-monokai .hljs-keyword,
+body.code-theme-monokai .hljs-selector-tag,
+body.code-theme-monokai .hljs-literal {
+    color: #f92672;
+}
+
+body.code-theme-monokai .hljs-string,
+body.code-theme-monokai .hljs-regexp,
+body.code-theme-monokai .hljs-addition {
+    color: #e6db74;
+}
+
+body.code-theme-monokai .hljs-number,
+body.code-theme-monokai .hljs-built_in,
+body.code-theme-monokai .hljs-symbol {
+    color: #ae81ff;
+}
+
+body.code-theme-monokai .hljs-title,
+body.code-theme-monokai .hljs-title.function_,
+body.code-theme-monokai .hljs-section {
+    color: #a6e22e;
+}
+
+body.code-theme-monokai .hljs-attr,
+body.code-theme-monokai .hljs-attribute,
+body.code-theme-monokai .hljs-variable {
+    color: #66d9ef;
+}
+
+body.code-theme-monokai .hljs-type,
+body.code-theme-monokai .hljs-class .hljs-title {
+    color: #fd971f;
+}
+
 /* 元信息 / 标签 */
 .hljs-meta,
 .hljs-tag {
@@ -1966,6 +2084,97 @@ body.lightbox-open {
     border-radius: 0 2px 2px 0;
     transition: width 0.08s linear;
     box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+/* ---------- 首页紧凑列表布局 ---------- */
+.post-list-compact {
+    gap: 0;
+    border-top: 1px solid var(--border);
+}
+
+.post-row {
+    border-bottom: 1px solid var(--border);
+}
+
+.post-row-link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 0.8rem 0.35rem;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.15s var(--ease), padding-left 0.15s var(--ease);
+}
+
+.post-row-link:hover {
+    background: var(--bg-soft);
+    padding-left: 0.7rem;
+    opacity: 1;
+}
+
+.post-row-title {
+    min-width: 0;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.post-row-link:hover .post-row-title {
+    color: var(--accent);
+}
+
+.post-row-date {
+    flex-shrink: 0;
+    color: var(--text-faint);
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 侧栏博主卡片 ---------- */
+.widget-author {
+    padding-bottom: 0.25rem;
+}
+
+.author-avatar {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.7rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.author-name {
+    margin: 0 0 0.35rem;
+    font-size: 0.9375rem;
+    font-weight: 650;
+    color: var(--text);
+}
+
+.author-bio {
+    margin: 0 0 0.7rem;
+    color: var(--text-soft);
+    font-size: 0.8438rem;
+    line-height: 1.65;
+}
+
+.author-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.9rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.author-links a {
+    color: var(--text-faint);
+    font-size: 0.8125rem;
+}
+
+.author-links a:hover {
+    color: var(--accent);
 }
 
 /* ---------- 响应式 ---------- */

@@ -13,7 +13,7 @@ $options = $this->options;
 ?>
 </main>
 
-<?php if ($this->is('post') || $this->is('page')): ?>
+<?php if (($this->is('post') || $this->is('page')) && ghostline_enabled('showProgress')): ?>
     <div class="reading-progress" data-reading-progress hidden>
         <span class="reading-progress-bar" data-reading-progress-bar></span>
     </div>
@@ -26,15 +26,38 @@ $options = $this->options;
             <a href="<?php $options->siteUrl(); ?>"><?php $options->title(); ?></a>
         </p>
 
+        <?php
+        $icp = ghostline_option('icpNumber', '');
+        $police = ghostline_option('policeNumber', '');
+        ?>
+
+        <?php if ($icp): ?>
+            <p class="footer-license">
+                <a href="https://beian.miit.gov.cn/" rel="noopener nofollow" target="_blank">
+                    <?php echo htmlspecialchars($icp, ENT_QUOTES, 'UTF-8'); ?>
+                </a>
+            </p>
+        <?php endif; ?>
+
+        <?php if ($police): ?>
+            <p class="footer-license">
+                <a href="https://beian.mps.gov.cn/" rel="noopener nofollow" target="_blank">
+                    <?php echo htmlspecialchars($police, ENT_QUOTES, 'UTF-8'); ?>
+                </a>
+            </p>
+        <?php endif; ?>
+
         <?php if ($options->footerText): ?>
             <div class="footer-note"><?php echo $options->footerText; ?></div>
         <?php endif; ?>
 
-        <p class="powered">
-            <?php _e('由'); ?>
-            <a href="https://typecho.org" rel="noopener" target="_blank">Typecho</a>
-            <?php _e('驱动 · 主题'); ?> Ghostline
-        </p>
+        <?php if ((string) ghostline_option('hidePoweredBy', '0') !== '1'): ?>
+            <p class="powered">
+                <?php _e('由'); ?>
+                <a href="https://typecho.org" rel="noopener" target="_blank">Typecho</a>
+                <?php _e('驱动 · 主题'); ?> Ghostline
+            </p>
+        <?php endif; ?>
     </div>
 </footer>
 

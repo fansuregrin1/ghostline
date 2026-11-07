@@ -37,46 +37,61 @@ $isHome = $this->is('index');
         <?php endif; ?>
 
         <?php if ($this->have()): ?>
-            <div class="post-list">
+            <?php $homeLayout = ghostline_home_layout(); ?>
+            <div class="post-list post-list-<?php echo $homeLayout; ?>">
                 <?php while ($this->next()): ?>
-                    <?php $cover = ghostline_cover($this); ?>
-                    <article class="post-card<?php echo $cover ? ' has-cover' : ''; ?>">
-                        <?php if ($cover): ?>
-                            <a class="post-card-cover" href="<?php $this->permalink(); ?>" tabindex="-1" aria-hidden="true">
-                                <img src="<?php echo htmlspecialchars($cover, ENT_QUOTES, 'UTF-8'); ?>"
-                                     alt="" loading="lazy" decoding="async">
+                    <?php
+                    $cover = ghostline_cover($this);
+                    $showCover = $cover && $homeLayout !== 'compact';
+                    ?>
+                    <?php if ($homeLayout === 'compact'): ?>
+                        <article class="post-row">
+                            <a class="post-row-link" href="<?php $this->permalink(); ?>">
+                                <span class="post-row-title"><?php $this->title(); ?></span>
+                                <time class="post-row-date" datetime="<?php $this->date('c'); ?>">
+                                    <?php $this->date('Y-m-d'); ?>
+                                </time>
                             </a>
-                        <?php endif; ?>
+                        </article>
+                    <?php else: ?>
+                        <article class="post-card<?php echo $showCover ? ' has-cover' : ''; ?>">
+                            <?php if ($showCover): ?>
+                                <a class="post-card-cover" href="<?php $this->permalink(); ?>" tabindex="-1" aria-hidden="true">
+                                    <img src="<?php echo htmlspecialchars($cover, ENT_QUOTES, 'UTF-8'); ?>"
+                                         alt="" loading="lazy" decoding="async">
+                                </a>
+                            <?php endif; ?>
 
-                        <div class="post-card-body">
-                            <h2 class="post-card-title">
-                                <a href="<?php $this->permalink(); ?>"><?php $this->title(); ?></a>
-                            </h2>
+                            <div class="post-card-body">
+                                <h2 class="post-card-title">
+                                    <a href="<?php $this->permalink(); ?>"><?php $this->title(); ?></a>
+                                </h2>
 
-                            <p class="post-card-excerpt"><?php echo ghostline_excerpt($this); ?></p>
+                                <p class="post-card-excerpt"><?php echo ghostline_excerpt($this, ghostline_excerpt_length()); ?></p>
 
-                            <footer class="post-card-meta">
-                                <time datetime="<?php $this->date('c'); ?>"><?php $this->date('Y-m-d'); ?></time>
+                                <footer class="post-card-meta">
+                                    <time datetime="<?php $this->date('c'); ?>"><?php $this->date('Y-m-d'); ?></time>
 
-                                <?php if ($this->category): ?>
-                                    <span class="meta-sep" aria-hidden="true">·</span>
-                                    <span class="meta-category"><?php $this->category(','); ?></span>
-                                <?php endif; ?>
+                                    <?php if ($this->category): ?>
+                                        <span class="meta-sep" aria-hidden="true">·</span>
+                                        <span class="meta-category"><?php $this->category(','); ?></span>
+                                    <?php endif; ?>
 
-                                <?php if (ghostline_enabled('showReading')): ?>
-                                    <span class="meta-sep" aria-hidden="true">·</span>
-                                    <span><?php echo ghostline_reading_time((string) $this->text); ?> <?php _e('分钟'); ?></span>
-                                <?php endif; ?>
+                                    <?php if (ghostline_enabled('showReading')): ?>
+                                        <span class="meta-sep" aria-hidden="true">·</span>
+                                        <span><?php echo ghostline_reading_time((string) $this->text); ?> <?php _e('分钟'); ?></span>
+                                    <?php endif; ?>
 
-                                <?php if ($this->commentsNum > 0): ?>
-                                    <span class="meta-sep" aria-hidden="true">·</span>
-                                    <a class="meta-comments" href="<?php $this->permalink(); ?>#comments">
-                                        <?php $this->commentsNum(_t('0 条评论'), _t('1 条评论'), _t('%d 条评论')); ?>
-                                    </a>
-                                <?php endif; ?>
-                            </footer>
-                        </div>
-                    </article>
+                                    <?php if ($this->commentsNum > 0): ?>
+                                        <span class="meta-sep" aria-hidden="true">·</span>
+                                        <a class="meta-comments" href="<?php $this->permalink(); ?>#comments">
+                                            <?php $this->commentsNum(_t('0 条评论'), _t('1 条评论'), _t('%d 条评论')); ?>
+                                        </a>
+                                    <?php endif; ?>
+                                </footer>
+                            </div>
+                        </article>
+                    <?php endif; ?>
                 <?php endwhile; ?>
             </div>
 

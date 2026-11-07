@@ -15,10 +15,49 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
 ?>
 <aside class="sidebar" id="secondary" aria-label="<?php _e('侧边栏'); ?>">
 
+    <?php
+    $authorName = ghostline_option('authorName', '');
+    $authorBio = ghostline_option('authorBio', '');
+    $authorAvatar = ghostline_option('authorAvatarUrl', '');
+    $socialLinks = ghostline_social_links();
+    ?>
+
+    <?php if ($authorName || $authorBio || $authorAvatar): ?>
+        <section class="widget widget-author">
+            <?php if ($authorAvatar): ?>
+                <img class="author-avatar"
+                     src="<?php echo htmlspecialchars($authorAvatar, ENT_QUOTES, 'UTF-8'); ?>"
+                     alt="<?php echo htmlspecialchars($authorName ?: '博主头像', ENT_QUOTES, 'UTF-8'); ?>"
+                     loading="lazy" decoding="async">
+            <?php endif; ?>
+
+            <?php if ($authorName): ?>
+                <p class="author-name"><?php echo htmlspecialchars($authorName, ENT_QUOTES, 'UTF-8'); ?></p>
+            <?php endif; ?>
+
+            <?php if ($authorBio): ?>
+                <p class="author-bio"><?php echo htmlspecialchars($authorBio, ENT_QUOTES, 'UTF-8'); ?></p>
+            <?php endif; ?>
+
+            <?php if ($socialLinks): ?>
+                <ul class="author-links">
+                    <?php foreach ($socialLinks as $link): ?>
+                        <li>
+                            <a href="<?php echo htmlspecialchars($link['url'], ENT_QUOTES, 'UTF-8'); ?>"
+                               rel="noopener nofollow" target="_blank">
+                                <?php echo htmlspecialchars($link['name'], ENT_QUOTES, 'UTF-8'); ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </section>
+    <?php endif; ?>
+
     <details class="widget" open>
         <summary class="widget-title"><?php _e('最新文章'); ?></summary>
         <ul class="widget-list">
-            <?php \Widget\Contents\Post\Recent::alloc('pageSize=5')
+            <?php \Widget\Contents\Post\Recent::alloc('pageSize=' . ghostline_recent_count())
                 ->parse('<li><a href="{permalink}">{title}</a></li>'); ?>
         </ul>
     </details>

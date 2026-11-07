@@ -40,7 +40,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
         })();
     </script>
 </head>
-<body>
+<body class="code-theme-<?php echo htmlspecialchars(ghostline_option('codeTheme', 'ghostline'), ENT_QUOTES, 'UTF-8'); ?>">
 <a class="skip-link" href="#main"><?php _e('跳到正文'); ?></a>
 
 <header class="site-header">
