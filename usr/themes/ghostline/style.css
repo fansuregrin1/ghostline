@@ -211,6 +211,15 @@ button {
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
+/* 自定义 logo：高度优先 32px，宽度按比例自适应 */
+.brand-logo {
+    height: 2rem;
+    width: auto;
+    max-width: 8rem;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
 .site-nav {
     display: flex;
     align-items: center;

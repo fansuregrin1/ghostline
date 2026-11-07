@@ -46,7 +46,13 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
 <header class="site-header">
     <div class="shell header-inner">
         <a class="site-brand" href="<?php $this->options->siteUrl(); ?>">
-            <span class="brand-mark" aria-hidden="true"></span>
+            <?php $brandLogo = ghostline_brand_logo(); ?>
+            <?php if ($brandLogo): ?>
+                <img class="brand-logo" src="<?php echo htmlspecialchars($brandLogo, ENT_QUOTES, 'UTF-8'); ?>"
+                     alt="" loading="eager" decoding="async">
+            <?php else: ?>
+                <span class="brand-mark" aria-hidden="true"></span>
+            <?php endif; ?>
             <span class="brand-name"><?php echo htmlspecialchars(ghostline_brand_title(), ENT_QUOTES, 'UTF-8'); ?></span>
         </a>
 

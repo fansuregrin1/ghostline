@@ -92,6 +92,20 @@ function themeConfig($form)
         ))->addRule('maxLength', _t('标题过长'), 40)
     );
 
+    $form->addInput(
+        (new \Typecho\Widget\Helper\Form\Element\Text(
+            'brandLogo',
+            null,
+            null,
+            _t('顶栏站点 Logo'),
+            _t('填入图片 URL 或站内路径（如 /usr/uploads/logo.png），会替换左侧默认色块。建议高度 32px 左右的 PNG 或 SVG，留空则显示默认色块')
+        ))->addRule(
+            'regexp',
+            _t('请填写合法的图片地址，例如 https://… 或 /usr/uploads/…'),
+            '#^(https?:)?//[^\s]+$|^/[^\s]*$#i'
+        )
+    );
+
     /* ---------------- 首页设置 ---------------- */
 
     ghostline_config_group($form, _t('首页设置'), _t('首页顶部标题、副标题与文章列表样式'));
@@ -601,6 +615,27 @@ function ghostline_brand_title(): string
     }
 
     return (string) \Typecho\Widget::widget('\Widget\Options')->title;
+}
+
+/**
+ * 顶栏 Logo 图片地址
+ *
+ * @return string 未配置或格式不合法时返回空字符串
+ */
+function ghostline_brand_logo(): string
+{
+    $logo = (string) ghostline_option('brandLogo', '');
+
+    if ($logo === '') {
+        return '';
+    }
+
+    // 支持 http(s)、协议相对地址与站内绝对路径
+    if (!preg_match('#^(https?:)?//#i', $logo) && strpos($logo, '/') !== 0) {
+        return '';
+    }
+
+    return $logo;
 }
 
 /**
