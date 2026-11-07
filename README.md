@@ -153,6 +153,27 @@ $keywords = $this->request->filter('search')->get('keywords');
 | 开放评论区 | 关闭后文章页不渲染评论模块 |
 | 显示阅读进度条 | 文章页顶部进度条 |
 
+### 自定义页面模板
+
+主题内置两个页面模板，在页面编辑页的「自定义模板」下拉中选择：
+
+**友情链接**（`links.php`）
+
+页面正文里每行写一个链接，用 `|` 分隔，后两项可省略：
+
+```
+名称|地址|一句话描述|头像地址
+
+Typecho|https://typecho.org|一个轻量的博客程序|/usr/uploads/logo.png
+GitHub|https://github.com/your-name|代码托管
+```
+
+正文里的说明文字会显示在网格上方，链接行由卡片网格呈现。
+
+**文章归档**（`archives.php`）
+
+自动读取全部已发布文章，按年份分组折叠展示，无需手动维护。
+
 ### 文章封面图
 
 编辑文章时，侧边栏底部会多出一个 **「封面图地址」** 字段：
@@ -192,6 +213,8 @@ usr/themes/ghostline/
 ├── tag.php             标签归档（紧凑标题列表）
 ├── post.php            文章详情
 ├── page.php            独立页面
+├── links.php           友情链接（自定义模板）
+├── archives.php        文章归档（自定义模板）
 ├── comments.php        评论区
 ├── 404.php             404 页
 ├── search-api.php      搜索候选接口（返回 JSON）
