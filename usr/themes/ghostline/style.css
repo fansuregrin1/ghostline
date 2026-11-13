@@ -108,6 +108,7 @@ svg {
 a {
     color: var(--accent);
     text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
     transition: color 0.15s var(--ease), opacity 0.15s var(--ease);
 }
 
@@ -118,6 +119,62 @@ a:hover {
 button {
     font: inherit;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/*
+ * 触控按压反馈
+ * 关闭浏览器默认的点击高亮色块，改用贴合元素、跟随圆角的自定义反馈。
+ * 只在触控设备生效，鼠标操作由各组件自己的 :hover 负责。
+ */
+@media (hover: none) {
+    .site-nav a:active,
+    .post-card-title a:active,
+    .post-card-meta a:active,
+    .post-content a:active {
+        opacity: 0.6;
+    }
+
+    .site-menu-inner a:active {
+        color: var(--text);
+        background: var(--bg-soft);
+    }
+
+    .icon-button:active,
+    .back-top:active {
+        transform: scale(0.94);
+    }
+
+    .post-card:active,
+    .post-nav-item:active {
+        background: var(--bg-soft);
+        transform: translateY(0);
+        box-shadow: none;
+    }
+
+    .tag-cloud .tag:active,
+    .post-tags a:active {
+        color: var(--accent);
+        opacity: 0.75;
+    }
+
+    .pagination .page-navigator a:active {
+        background: var(--bg-soft);
+    }
+
+    .archive-link:active,
+    .post-row-link:active {
+        background: var(--bg-soft);
+    }
+
+    .link-card-inner:active {
+        background: var(--bg-soft);
+        border-color: var(--border-strong);
+    }
+
+    .search-result-item:active {
+        background: var(--bg-soft);
+    }
 }
 
 /* 选中文字：使用主题色的淡色版本，文字保持原色以确保可读性 */
@@ -339,7 +396,7 @@ button {
     border: 1px solid var(--border);
     border-radius: 50%;
     transition: color 0.15s var(--ease), border-color 0.15s var(--ease),
-        background-color 0.15s var(--ease);
+        background-color 0.15s var(--ease), transform 0.15s var(--ease);
 }
 
 .icon-button:hover {
@@ -430,7 +487,7 @@ button {
     border-radius: var(--radius);
     border: 1px solid transparent;
     transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease),
-        transform 0.2s var(--ease);
+        transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
 
 /* 带封面图的列表项：缩略图在左，文字在右 */
@@ -1154,7 +1211,8 @@ button {
     background: var(--bg-elevated);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    transition: border-color 0.15s var(--ease), transform 0.15s var(--ease);
+    transition: border-color 0.15s var(--ease), transform 0.15s var(--ease),
+        background-color 0.15s var(--ease);
 }
 
 .post-nav-item:hover {
@@ -2392,7 +2450,7 @@ body.lightbox-open {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     transition: border-color 0.15s var(--ease), transform 0.15s var(--ease),
-        box-shadow 0.15s var(--ease);
+        box-shadow 0.15s var(--ease), background-color 0.15s var(--ease);
 }
 
 .link-card-inner:hover {
