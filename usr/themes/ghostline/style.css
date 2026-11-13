@@ -257,6 +257,50 @@ button {
     min-width: 0;
 }
 
+/* 右侧操作按钮组：搜索、配色切换 */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+/* 移动端折叠菜单面板 */
+.site-menu {
+    display: none;
+    border-top: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 96%, transparent);
+}
+
+.site-menu[hidden] {
+    display: none;
+}
+
+.site-menu-inner {
+    display: flex;
+    flex-direction: column;
+    padding-block: 0.4rem 0.75rem;
+}
+
+.site-menu-inner a {
+    padding: 0.7rem 0.25rem;
+    color: var(--text-soft);
+    border-radius: 6px;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.site-menu-inner a:hover {
+    color: var(--text);
+    background: var(--bg-soft);
+}
+
+.site-menu-inner a.is-current {
+    color: var(--accent);
+    font-weight: 600;
+}
+
 .site-nav a {
     color: var(--text-soft);
     padding-block: 0.3rem;
@@ -312,6 +356,11 @@ button {
     stroke-width: 1.7;
     stroke-linecap: round;
     stroke-linejoin: round;
+}
+
+/* 移动端折叠菜单按钮：桌面隐藏，小屏显示 */
+.nav-menu-toggle {
+    display: none;
 }
 
 /* 三态切换：图标反映当前模式 */
@@ -2790,6 +2839,7 @@ body.lightbox-open {
 }
 
 @media (max-width: 640px) {
+    /* 移动端：主导航收起，改由菜单按钮展开 */
     .header-inner {
         min-height: 3.5rem;
         gap: 0.75rem;
@@ -2798,26 +2848,27 @@ body.lightbox-open {
     .site-brand {
         font-size: 1rem;
         flex-shrink: 0;
+        min-width: 0;
     }
 
-    /* 导航横向滚动，避免挤破布局 */
+    .brand-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     .site-nav {
-        font-size: 0.875rem;
-        gap: 1rem;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        padding-block: 0.25rem;
-        margin-right: -0.25rem;
-    }
-
-    .site-nav::-webkit-scrollbar {
         display: none;
     }
 
-    .site-nav a {
-        white-space: nowrap;
-        flex-shrink: 0;
+    .nav-menu-toggle {
+        display: inline-flex;
+    }
+
+    .site-menu:not([hidden]) {
+        display: block;
+        max-height: calc(100dvh - 3.5rem);
+        overflow-y: auto;
     }
 
     .icon-button {

@@ -58,6 +58,56 @@
     // 初始化按钮状态
     applyMode(currentMode());
 
+    /* ---------- 移动端折叠导航 ---------- */
+    var navToggle = document.querySelector('[data-nav-toggle]');
+    var siteMenu = document.querySelector('[data-site-menu]');
+
+    if (navToggle && siteMenu) {
+        var setMenu = function (open) {
+            siteMenu.hidden = !open;
+            navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            navToggle.setAttribute('aria-label', open ? '收起导航' : '展开导航');
+        };
+
+        navToggle.addEventListener('click', function (event) {
+            event.stopPropagation();
+            setMenu(siteMenu.hidden);
+        });
+
+        // 点击菜单外部关闭
+        document.addEventListener('click', function (event) {
+            if (siteMenu.hidden) {
+                return;
+            }
+
+            if (!siteMenu.contains(event.target) && !navToggle.contains(event.target)) {
+                setMenu(false);
+            }
+        });
+
+        // Esc 关闭并把焦点交还按钮
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && !siteMenu.hidden) {
+                setMenu(false);
+                navToggle.focus();
+            }
+        });
+
+        // 切回桌面尺寸时复位状态
+        var desktopNav = window.matchMedia('(min-width: 641px)');
+        var resetMenu = function () {
+            if (desktopNav.matches) {
+                setMenu(false);
+            }
+        };
+
+        if (desktopNav.addEventListener) {
+            desktopNav.addEventListener('change', resetMenu);
+        } else if (desktopNav.addListener) {
+            desktopNav.addListener(resetMenu);
+        }
+    }
+
     /* ---------- 代码块：语法高亮 + 行号 + 复制 ---------- */
     document.querySelectorAll('[data-post-content] pre').forEach(function (pre) {
         var code = pre.querySelector('code');

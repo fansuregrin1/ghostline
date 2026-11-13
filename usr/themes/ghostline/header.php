@@ -57,7 +57,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
             <span class="brand-name"><?php echo htmlspecialchars(ghostline_brand_title(), ENT_QUOTES, 'UTF-8'); ?></span>
         </a>
 
-        <nav class="site-nav" aria-label="<?php _e('主导航'); ?>">
+        <nav class="site-nav" aria-label="<?php _e('主导航'); ?>" data-site-nav>
             <a<?php if ($this->is('index')): ?> class="is-current" aria-current="page"<?php endif; ?>
                href="<?php $this->options->siteUrl(); ?>"><?php _e('首页'); ?></a>
 
@@ -66,7 +66,9 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
                 <a<?php if ($this->is('page', $pages->slug)): ?> class="is-current" aria-current="page"<?php endif; ?>
                    href="<?php $pages->permalink(); ?>"><?php $pages->title(); ?></a>
             <?php endwhile; ?>
+        </nav>
 
+        <div class="header-actions">
             <button class="icon-button nav-search-toggle" type="button" aria-label="<?php _e('搜索'); ?>"
                     aria-haspopup="dialog" aria-expanded="false" aria-controls="search-dialog"
                     data-search-toggle>
@@ -90,7 +92,30 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
                     <path d="M8.5 20.5h7M12 17v3.5"></path>
                 </svg>
             </button>
-        </nav>
+
+            <button class="icon-button nav-menu-toggle" type="button"
+                    aria-label="<?php _e('展开导航'); ?>" aria-expanded="false"
+                    aria-controls="site-menu" data-nav-toggle>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 7h16M4 12h16M4 17h16"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <?php
+    // 移动端折叠菜单：复用主导航的页面列表
+    \Typecho\Widget::widget('\Widget\Contents\Page\Rows')->to($mp);
+    ?>
+    <div class="site-menu" id="site-menu" data-site-menu hidden>
+        <div class="shell site-menu-inner">
+            <a<?php if ($this->is('index')): ?> class="is-current" aria-current="page"<?php endif; ?>
+               href="<?php $this->options->siteUrl(); ?>"><?php _e('首页'); ?></a>
+            <?php while ($mp->next()): ?>
+                <a<?php if ($this->is('page', $mp->slug)): ?> class="is-current" aria-current="page"<?php endif; ?>
+                   href="<?php $mp->permalink(); ?>"><?php $mp->title(); ?></a>
+            <?php endwhile; ?>
+        </div>
     </div>
 </header>
 
