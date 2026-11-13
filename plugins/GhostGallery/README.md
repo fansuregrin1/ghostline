@@ -1,4 +1,4 @@
-# Gallery
+# GhostGallery
 
 兼容 Hexo 图集语法，把 `{% gi %}` 渲染为响应式图片网格。
 
@@ -18,7 +18,7 @@
 
 ## 安装
 
-把 `Gallery` 目录放进 Typecho 的 `usr/plugins/`，然后在后台「控制台 → 插件」中启用。
+把 `GhostGallery` 目录放进 Typecho 的 `usr/plugins/`，然后在后台「控制台 → 插件」中启用。
 
 ## 配置
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace TypechoPlugin\Gallery;
+namespace TypechoPlugin\GhostGallery;
 
 use Typecho\Plugin\PluginInterface;
 use Typecho\Widget\Helper\Form;
@@ -16,8 +16,8 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
 /**
  * 兼容 Hexo 图集语法，把 {% gi %} 渲染为响应式图片网格。
  *
- * @package Gallery
- * @author Ghostline
+ * @package GhostGallery
+ * @author fansuregrin
  * @version 1.0.0
  * @link https://github.com/fansuregrin1/ghostline
  */
@@ -119,7 +119,7 @@ class Plugin implements PluginInterface
             $db = \Typecho\Db::get();
             $row = $db->fetchRow(
                 $db->select('value')->from('table.options')
-                    ->where('name = ?', 'plugin:Gallery')
+                    ->where('name = ?', 'plugin:GhostGallery')
                     ->where('user = ?', 0)
             );
 
