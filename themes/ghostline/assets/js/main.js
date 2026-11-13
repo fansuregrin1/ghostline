@@ -767,14 +767,48 @@
         var lightbox = null;
 
         /**
-         * 判断图片是否为「独立成段的大图」。
-         * 段落里除了这张图和空白外没有其它内容，就按块级展示并可点击放大。
+         * 判断图片是否可以按块级大图展示。
+         *
+         * 两种情况都算：
+         * 1. 段落里除了这张图和空白外没有其它内容；
+         * 2. 图片紧跟在 <br> 之后、且后面没有其它内容，即它在段落里独占一行
+         *    （Hexo 等编辑器常把「文字换行 + 图片」渲染成同段落内的 <br><img>）。
          */
         var isStandaloneImage = function (img) {
             var paragraph = img.closest('p');
 
             // 不在段落里（如单独写 <img> 标签）也按块级处理
             if (!paragraph) {
+                return true;
+            }
+
+            // 跳过空白文本节点，取相邻的实际内容
+            var prevContent = function (node) {
+                while (node && node.nodeType === 3 && node.textContent.trim() === '') {
+                    node = node.previousSibling;
+                }
+                return node;
+            };
+
+            var nextContent = function (node) {
+                while (node && node.nodeType === 3 && node.textContent.trim() === '') {
+                    node = node.nextSibling;
+                }
+                return node;
+            };
+
+            var prev = prevContent(img.previousSibling);
+            var next = nextContent(img.nextSibling);
+
+            // 图片紧跟在 <br> 之后；后面可以跟多个 <br>，但之后不能再有内容
+            var afterBreak = prev && prev.nodeType === 1 && prev.tagName === 'BR';
+
+            var tail = next;
+            while (tail && tail.nodeType === 1 && tail.tagName === 'BR') {
+                tail = nextContent(tail.nextSibling);
+            }
+
+            if (afterBreak && !tail) {
                 return true;
             }
 
