@@ -421,13 +421,32 @@ function themeFields($layout)
         null,
         null,
         _t('封面图地址'),
-        _t('填入图片 URL，会显示在列表页。留空则使用纯文字样式'),
-        _t('显示在文章列表中的缩略图')
+        _t('用于列表页缩略图，可留空')
     );
 
-    $cover->setAttribute('class', 'text w-100');
+    // class 必须加在 input 上；对 Element 调 setAttribute 会作用到外层 <ul>
+    foreach ($cover->inputs as $input) {
+        $input->setAttribute('class', 'text w-100');
+        $input->setAttribute('placeholder', 'https://');
+    }
 
     $layout->addItem($cover);
+
+    // Typecho 1.3 把自定义字段渲染成「字段名 + 字段值」两栏，其中 .field-value
+    // 是 flex 行容器，会让输入框和说明文字并排各占一半；而后台样式又给说明文字
+    // 施加了负的 margin-top，使它压住输入框下边框。
+    // 这里只针对封面图这一项，改为纵向排列并恢复正常间距，不影响其他自定义字段。
+    static $styled = false;
+
+    if (!$styled) {
+        $styled = true;
+        echo '<style>'
+            . '#custom-field li.field:has(input[name="fields[cover]"])'
+            . ' .field-value{flex-direction:column;align-items:stretch}'
+            . '#custom-field li.field:has(input[name="fields[cover]"])'
+            . ' .field-value .description{margin:.35em 0 0}'
+            . '</style>';
+    }
 }
 
 /**
