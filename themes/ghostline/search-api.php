@@ -22,12 +22,15 @@
  * @package Ghostline
  */
 
-// 探测 Typecho 根目录：主题可能位于 <root>/usr/themes/<theme>/
-// 开发时主题通过软链接挂载，因此用真实路径向上查找含 config.inc.php 的目录
+// 探测 Typecho 根目录。
+// 生产部署：<root>/usr/themes/ghostline → 向上 3 层即 <root>
+// 本地开发：主题位于仓库的 themes/ghostline，Typecho 在 <repo>/dev/typecho
+// 软链接挂载时 __DIR__ 可能是链接路径或真实路径，因此把常见层级都列出来。
 $candidates = [
-    dirname(__DIR__, 3),                        // 标准部署：<root>/usr/themes/ghostline
-    dirname(__DIR__, 3) . '/dev/typecho',       // 本仓库开发布局
-    dirname(__DIR__, 4) . '/dev/typecho',       // 软链接情况下可能多一层
+    dirname(__DIR__, 3),                              // 标准部署：<root>/usr/themes/ghostline
+    dirname(__DIR__, 2) . '/dev/typecho',             // 仓库布局（真实路径）：themes/ghostline
+    dirname(__DIR__, 3) . '/dev/typecho',             // 仓库布局（软链接路径）：usr/themes/ghostline
+    dirname(__DIR__, 4) . '/dev/typecho',             // 软链接可能多一层
 ];
 
 $root = null;

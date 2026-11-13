@@ -8,7 +8,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-THEME="$ROOT/usr/themes/ghostline"
+THEME="$ROOT/themes/ghostline"
 OUT="$ROOT/dist"
 
 if [ ! -d "$THEME" ]; then
@@ -23,8 +23,14 @@ mkdir -p "$OUT"
 ZIP="$OUT/ghostline-${VERSION}.zip"
 rm -f "$ZIP"
 
-# 进入主题父目录，保证 zip 内结构为 ghostline/...
-cd "$(dirname "$THEME")"
+# 仓库里主题目录叫 themes/ghostline，打包时重置为 ghostline/，
+# 让用户解压后可直接放进 Typecho 的 usr/themes/
+STAGE="$(mktemp -d)"
+trap 'rm -rf "$STAGE"' EXIT
+mkdir -p "$STAGE/ghostline"
+cp -a "$THEME/." "$STAGE/ghostline/"
+
+cd "$STAGE"
 zip -rq "$ZIP" ghostline \
     -x '*.DS_Store' \
     -x '__MACOSX*' \

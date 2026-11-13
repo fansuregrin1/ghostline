@@ -14,7 +14,7 @@ dev/
 主题通过软链接接入：
 
 ```
-dev/typecho/usr/themes/ghostline -> ../../../../usr/themes/ghostline
+dev/typecho/usr/themes/ghostline -> ../../../../themes/ghostline
 ```
 
 改主题文件后刷新页面即可生效。
@@ -44,7 +44,7 @@ php install.php
 cd ../..
 
 # 3. 链接主题
-ln -s "$(pwd)/usr/themes/ghostline" dev/typecho/usr/themes/ghostline
+ln -s "$(pwd)/themes/ghostline" dev/typecho/usr/themes/ghostline
 
 # 4. 启用主题 + 生成测试数据
 sqlite3 dev/db/site.db "UPDATE typecho_options SET value='ghostline' WHERE name='theme' AND user=0;"

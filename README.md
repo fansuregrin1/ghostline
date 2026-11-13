@@ -42,12 +42,13 @@
 
 ```bash
 cd /path/to/typecho/usr/themes
-git clone https://github.com/fansuregrin1/ghostline.git
+git clone https://github.com/fansuregrin1/ghostline.git ghostline-src
+ln -s "$PWD/ghostline-src/themes/ghostline" "$PWD/ghostline"
 ```
 
-然后在后台启用即可。
+然后在后台启用即可。用软链接的好处是 `git pull` 后主题立即更新。
 
-> `usr/themes/ghostline/` 是主题本体。仓库根目录的其他文件（`dev/`）只用于本地开发，不需要部署。
+> `themes/ghostline/` 是主题本体。仓库根目录的其他文件（`dev/`、`plugins/`）只用于本地开发，不需要部署。
 
 ### 重要：中文搜索修复
 
@@ -222,7 +223,7 @@ bash scripts/package.sh
 ## 目录结构
 
 ```
-usr/themes/ghostline/
+themes/ghostline/
 ├── screenshot.jpg      后台预览图
 ├── functions.php       入口文件（加载 includes/）
 ├── includes/
