@@ -122,6 +122,12 @@ button {
     -webkit-tap-highlight-color: transparent;
 }
 
+/* 原生可点击元素同样关闭系统高亮 */
+summary,
+label {
+    -webkit-tap-highlight-color: transparent;
+}
+
 /*
  * 触控按压反馈
  * 关闭浏览器默认的点击高亮色块，改用贴合元素、跟随圆角的自定义反馈。
@@ -138,6 +144,12 @@ button {
     .site-menu-inner a:active {
         color: var(--text);
         background: var(--bg-soft);
+    }
+
+    /* 侧栏手风琴与文章目录的标题：原生 summary 也会触发系统高亮 */
+    .sidebar .widget > .widget-title:active,
+    .toc > summary:active {
+        color: var(--accent);
     }
 
     .icon-button:active,
@@ -2851,6 +2863,7 @@ body.lightbox-open {
     /* 移动端：侧栏折叠成手风琴面板 */
     .sidebar .widget {
         border-radius: var(--radius-sm);
+        padding-inline: 0.85rem;
     }
 
     .sidebar .widget:hover {
@@ -2861,8 +2874,9 @@ body.lightbox-open {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 0.75rem;
         margin: 0;
-        padding: 0.95rem 0.15rem;
+        padding-block: 0.95rem;
         font-size: 0.9375rem;
         font-weight: 600;
         letter-spacing: 0;
@@ -2870,13 +2884,15 @@ body.lightbox-open {
         color: var(--text);
         cursor: pointer;
         pointer-events: auto;
+        -webkit-tap-highlight-color: transparent;
+        list-style: none;
     }
 
     .sidebar .widget > .widget-title::after {
         content: "";
+        flex-shrink: 0;
         width: 0.5rem;
         height: 0.5rem;
-        margin-right: 0.25rem;
         border-right: 1.5px solid var(--text-faint);
         border-bottom: 1.5px solid var(--text-faint);
         transform: rotate(45deg);

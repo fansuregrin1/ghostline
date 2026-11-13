@@ -54,7 +54,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
         </section>
     <?php endif; ?>
 
-    <details class="widget" open>
+    <details class="widget" open data-default-open>
         <summary class="widget-title"><?php _e('最新文章'); ?></summary>
         <ul class="widget-list">
             <?php \Widget\Contents\Post\Recent::alloc('pageSize=' . ghostline_recent_count())

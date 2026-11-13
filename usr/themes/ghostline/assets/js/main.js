@@ -741,10 +741,19 @@
     var desktopQuery = window.matchMedia('(min-width: 901px)');
 
     if (sidebar) {
+        // 移动端只恢复「默认展开」的那一项，其余收起；用户手动操作的状态不被覆盖
+        var defaultOpen = sidebar.querySelector('details.widget[data-default-open]');
+
         var syncSidebar = function () {
-            sidebar.querySelectorAll('.widget').forEach(function (widget) {
-                widget.open = desktopQuery.matches;
-            });
+            if (desktopQuery.matches) {
+                sidebar.querySelectorAll('details.widget').forEach(function (widget) {
+                    widget.open = true;
+                });
+            } else if (defaultOpen) {
+                sidebar.querySelectorAll('details.widget').forEach(function (widget) {
+                    widget.open = widget === defaultOpen;
+                });
+            }
         };
 
         syncSidebar();
