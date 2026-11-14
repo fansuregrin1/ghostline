@@ -28,7 +28,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
                 <img class="author-avatar"
                      src="<?php echo htmlspecialchars($authorAvatar, ENT_QUOTES, 'UTF-8'); ?>"
                      alt="<?php echo htmlspecialchars($authorName ?: '博主头像', ENT_QUOTES, 'UTF-8'); ?>"
-                     loading="lazy" decoding="async">
+                     decoding="async">
             <?php endif; ?>
 
             <?php if ($authorName): ?>
