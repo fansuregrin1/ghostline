@@ -2910,7 +2910,10 @@ body.lightbox-open {
         display: none;
     }
 
-    .sidebar .widget > *:not(summary) {
+    /* 折叠面板的内容底部留白。只作用于 details 面板的内容，
+       不牵连 .widget-author 里的头像等元素（加了会让图片被压缩） */
+    .sidebar details.widget > .widget-list,
+    .sidebar details.widget > .tag-cloud {
         padding-bottom: 1rem;
     }
 }
