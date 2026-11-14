@@ -23,6 +23,14 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
             'author'   => _t('%s 的文章'),
         ], '', ' — '); ?><?php $this->options->title(); ?></title>
 
+    <?php
+    // 浏览器标签页图标：Typecho 的 header() 不输出 favicon，由主题自行处理
+    $favicon = trim((string) ghostline_option('faviconUrl', ''));
+    if ($favicon !== '' && (preg_match('#^(https?:)?//#i', $favicon) || strpos($favicon, '/') === 0)):
+        ?>
+        <link rel="icon" href="<?php echo htmlspecialchars($favicon, ENT_QUOTES, 'UTF-8'); ?>">
+    <?php endif; ?>
+
     <link rel="stylesheet" href="<?php $this->options->themeUrl('style.css'); ?>">
     <style><?php ghostline_accent_style(); ?></style>
 

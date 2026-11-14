@@ -93,6 +93,20 @@ function themeConfig($form)
         )
     );
 
+    $form->addInput(
+        (new \Typecho\Widget\Helper\Form\Element\Text(
+            'faviconUrl',
+            null,
+            null,
+            _t('浏览器图标'),
+            _t('显示在浏览器标签页的小图标，支持 png、ico、svg，建议 32×32 或 64×64。留空则不输出该标签')
+        ))->addRule(
+            'regexp',
+            _t('请填写合法的图片地址，例如 https://… 或 /usr/uploads/…'),
+            '#^(https?:)?//[^\s]+$|^/[^\s]*$#i'
+        )
+    );
+
     // 预设配色方案
     $palette = ghostline_accent_palette();
     $schemeOptions = [];
